@@ -5,11 +5,11 @@
 ![](https://github.com/user-attachments/assets/17f98cf3-d4d6-404b-801f-43a44ba830ca)
 
 
-Coming soon.
+## Coming soon.
 
 ### Stack (Planned)
 - Nextjs App Router
-- TailwindCSS (NextUI)
+- TailwindCSS
 - Prisma
 - Postgres/MySQL
 
