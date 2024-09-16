@@ -16,6 +16,8 @@ If you want to be a future contributor, star this repo ⭐ to get updates
 
 or Ping me on <a href="https://x.com/the_mcnaveen" target="_blank">Twitter</a>
 
-Talk to us
 
-![Join Discord](https://discord.com/api/guilds/1284581442495451177/widget.png?style=banner1)
+
+<a href="https://discord.gg/kqytVXS58M" target="_blank">
+Join our discord server
+</a>
