@@ -4,7 +4,6 @@
 
 ![](https://github.com/user-attachments/assets/17f98cf3-d4d6-404b-801f-43a44ba830ca)
 
-
 ## Coming soon.
 
 ### Stack (Planned)
@@ -16,3 +15,7 @@
 If you want to be a future contributor, star this repo ⭐ to get updates
 
 or Ping me on <a href="https://x.com/the_mcnaveen" target="_blank">Twitter</a>
+
+Talk to us
+
+![Join Discord](https://discord.com/api/guilds/1284581442495451177/widget.png?style=banner1)
