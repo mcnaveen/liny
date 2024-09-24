@@ -36,3 +36,21 @@ Currently, we are not accepting contributions. Until the project is ready for pr
 ## License
 
 Liny is licensed under the [AGPL-3.0 license](https://github.com/mcnaveen/liny/blob/main/LICENSE).
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/mcnaveen"><img src="https://avatars.githubusercontent.com/u/8493007?v=4?s=50" width="50px;" alt="Naveen MC"/><br /><sub><b>Naveen MC</b></sub></a><br /><a href="https://github.com/mcnaveen/liny/commits?author=mcnaveen" title="Code">💻</a> <a href="#ideas-mcnaveen" title="Ideas, Planning, & Feedback">🤔</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
