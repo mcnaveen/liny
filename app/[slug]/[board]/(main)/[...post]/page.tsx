@@ -1,0 +1,90 @@
+import { formatDistance } from "date-fns";
+import { getServerSession } from "next-auth";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
+
+import { findPostById } from "@/helpers/posts/findPostById";
+import { UpvoteButton } from "@/components/posts/upvote";
+import { authOptions } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
+import { Reply } from "@/components/replies/create";
+import { RepliesList } from "@/components/replies/list";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { post: string; slug: string; board: string };
+}) {
+  const post = await findPostById(params.post[1]);
+
+  return {
+    title:
+      post?.title + " - " + post?.board?.name + " - " + post?.project?.name,
+  };
+}
+
+export default async function PostPage({
+  params,
+}: {
+  params: { post: string; slug: string; board: string };
+}) {
+  const postId = params.post[1];
+  const post = await findPostById(postId);
+  const session = await getServerSession(authOptions);
+
+  if (!post) {
+    return <div>Post not found</div>;
+  }
+
+  const isUpvoted = post.upvotes.some(
+    (upvote) => upvote.user.id === session?.user?.id && upvote.isActive,
+  );
+
+  return (
+    <>
+      <Link href={`/${params.slug}/${params.board}`}>
+        <Button className="mb-4 text-sm" size="sm" variant="ghost">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back
+        </Button>
+      </Link>
+      <header className="bg-gray-100 dark:bg-[#0A0A0A] dark:text-gray-200 px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-start sm:items-center pb-8 rounded-t-lg">
+        <UpvoteButton
+          isUpvoted={isUpvoted}
+          postId={post.id}
+          upvoteCount={post._count.upvotes}
+        />
+        <div className="ml-0 sm:ml-4 mt-4 sm:mt-0">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200">
+            {post.title}
+          </h2>
+          <p className="text-sm text-gray-600 mt-1 dark:text-gray-300">
+            {post.description}
+          </p>
+          <p className="text-xs sm:text-sm text-gray-600 mt-1 dark:text-gray-300">
+            {formatDistance(post.createdAt, new Date(), {
+              addSuffix: true,
+            })}
+          </p>
+        </div>
+      </header>
+      <div className="-mt-2">
+        <Reply
+          boardId={post.boardId as string}
+          postId={post.id}
+          projectId={post.projectId}
+        />
+        <div className="mt-4">
+          <RepliesList
+            boardId={post.boardId}
+            postId={post.id}
+            projectId={post.projectId}
+          />
+        </div>
+      </div>
+    </>
+  );
+}
