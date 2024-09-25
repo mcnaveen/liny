@@ -49,7 +49,7 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row">
+    <div className="flex flex-col gap-4 bg-card md:flex-row">
       {Object.entries(columns).map(([status, posts]) => (
         <div key={status} className="mb-4 flex-1 rounded-lg border p-4 md:mb-0">
           <h3 className="mb-4 flex items-center font-semibold">

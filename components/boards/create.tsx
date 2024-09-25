@@ -177,12 +177,6 @@ export const CreateBoardForm = ({
                           <SelectItem value="FEATURE_REQUEST">
                             Feature Request
                           </SelectItem>
-                          <SelectItem disabled value="#">
-                            Issue (Coming Soon)
-                          </SelectItem>
-                          <SelectItem disabled value="#">
-                            Changelog (Coming Soon)
-                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>

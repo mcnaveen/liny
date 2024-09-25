@@ -55,7 +55,7 @@ export const ReplyCard = ({
           </AvatarFallback>
         </Avatar>
         <div>
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 text-gray-500">
             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
               {reply.user.name}
             </p>
