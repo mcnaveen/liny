@@ -42,7 +42,7 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
   });
 
   // Calculate upvote count for each post
-  const roadmapWithUpvoteCount = roadmap.map(post => ({
+  const roadmapWithUpvoteCount = roadmap.map((post) => ({
     ...post,
     upvoteCount: post.upvotes.length, // Count the number of upvotes
   }));
@@ -54,17 +54,17 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-4">
+    <div className="flex flex-col gap-4 md:flex-row">
       {Object.entries(columns).map(([status, posts]) => (
-        <div key={status} className="flex-1 p-4 rounded-lg border mb-4 md:mb-0">
-          <h3 className="font-semibold mb-4 flex items-center">
+        <div key={status} className="mb-4 flex-1 rounded-lg border p-4 md:mb-0">
+          <h3 className="mb-4 flex items-center font-semibold">
             <div
-              className={`w-2 h-2 rounded-full inline-block mr-2 ${
+              className={`mr-2 inline-block h-2 w-2 rounded-full ${
                 status === "PLANNED"
                   ? "bg-planned"
                   : status === "IN_PROGRESS"
-                  ? "bg-progress animate-pulse"
-                  : "bg-completed"
+                    ? "animate-pulse bg-progress"
+                    : "bg-completed"
               }`}
             />
             {status.replace("_", " ")}
@@ -75,7 +75,7 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
                 key={post.id}
                 href={`/${post.project.slug}/${post.board.slug}/${post.slug}/${post.id}`}
               >
-                <Card key={post.id} className="p-4 mb-2">
+                <Card key={post.id} className="mb-2 p-4">
                   <div className="flex items-center">
                     <UpvoteButton
                       isUpvoted={post.isUpvoted}
@@ -83,10 +83,10 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
                       upvoteCount={post.upvotes.length}
                     />
                     <div className="flex flex-col">
-                      <CardTitle className="ml-2 text-sm font-medium font-sans">
+                      <CardTitle className="ml-2 font-sans text-sm font-medium">
                         {post.title}
                       </CardTitle>
-                      <CardDescription className="ml-2 text-xs text-muted-foreground uppercase">
+                      <CardDescription className="ml-2 text-xs uppercase text-muted-foreground">
                         {post.board.name}
                       </CardDescription>
                     </div>

@@ -14,7 +14,7 @@ export const SignOutButton: React.FC<SignOutButtonProps> = ({ className }) => {
     <button
       aria-label="Sign out"
       className={clsx(
-        "cursor-pointer flex items-center gap-2 w-full",
+        "flex w-full cursor-pointer items-center gap-2",
         className,
       )}
       onClick={() => signOut()}

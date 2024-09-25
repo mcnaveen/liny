@@ -47,24 +47,24 @@ export default async function PostPage({
     <>
       <Link href={`/${params.slug}/${params.board}`}>
         <Button className="mb-4 text-sm" size="sm" variant="ghost">
-          <ArrowLeft className="w-4 h-4 mr-2" />
+          <ArrowLeft className="mr-2 h-4 w-4" />
           Back
         </Button>
       </Link>
-      <header className="bg-gray-100 dark:bg-[#0A0A0A] dark:text-gray-200 px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row items-start sm:items-center pb-8 rounded-t-lg">
+      <header className="flex flex-col items-start rounded-t-lg border-b border-gray-200 bg-gray-100 px-4 py-4 pb-8 dark:border-gray-700 dark:bg-[#0A0A0A] dark:text-gray-200 sm:flex-row sm:items-center sm:px-6">
         <UpvoteButton
           isUpvoted={isUpvoted}
           postId={post.id}
           upvoteCount={post._count.upvotes}
         />
-        <div className="ml-0 sm:ml-4 mt-4 sm:mt-0">
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200">
+        <div className="ml-0 mt-4 sm:ml-4 sm:mt-0">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 sm:text-2xl">
             {post.title}
           </h2>
-          <p className="text-sm text-gray-600 mt-1 dark:text-gray-300">
+          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
             {post.description}
           </p>
-          <p className="text-xs sm:text-sm text-gray-600 mt-1 dark:text-gray-300">
+          <p className="mt-1 text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
             {formatDistance(post.createdAt, new Date(), {
               addSuffix: true,
             })}

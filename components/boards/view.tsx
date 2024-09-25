@@ -17,22 +17,22 @@ export const BoardView = () => {
   };
 
   return (
-    <div className="flex space-x-0.5 h-10 items-center rounded-md border p-[2px]">
+    <div className="flex h-10 items-center space-x-0.5 rounded-md border p-[2px]">
       <Button
-        className={`rounded-r-none h-8 w-8 ${view === "list" ? "bg-card" : "bg-card"}`}
+        className={`h-8 w-8 rounded-r-none ${view === "list" ? "bg-card" : "bg-card"}`}
         size="icon"
         variant="ghost"
         onClick={() => setView("list")}
       >
-        <List className="w-4 h-4" scale={0.5} />
+        <List className="h-4 w-4" scale={0.5} />
       </Button>
       <Button
-        className={`rounded-l-none h-8 w-8 ${view === "grid" ? "bg-gray-100 dark:bg-gray-900" : "bg-white dark:bg-gray-900"}`}
+        className={`h-8 w-8 rounded-l-none ${view === "grid" ? "bg-gray-100 dark:bg-gray-900" : "bg-white dark:bg-gray-900"}`}
         size="icon"
         variant="ghost"
         onClick={() => setView("grid")}
       >
-        <LayoutGrid className="w-4 h-4" scale={0.5} />
+        <LayoutGrid className="h-4 w-4" scale={0.5} />
       </Button>
     </div>
   );

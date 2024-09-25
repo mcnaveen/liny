@@ -1,4 +1,4 @@
-name: '🐛 Bug Report'
+name: "🐛 Bug Report"
 description: Create a bug report for Liny.
 body:
   - type: textarea
@@ -24,12 +24,12 @@ body:
   - type: input
     attributes:
       label: Which Liny version are you using? (if relevant)
-      description: 'For example: Chrome, Edge, Firefox, etc'
+      description: "For example: Chrome, Edge, Firefox, etc"
   - type: input
     attributes:
       label: Which browser are you using? (if relevant)
-      description: 'For example: Chrome, Edge, Firefox, etc'
+      description: "For example: Chrome, Edge, Firefox, etc"
   - type: input
     attributes:
       label: How are you deploying your application? (if relevant)
-      description: 'For example: Vercel, Railway, Docker, etc'
+      description: "For example: Vercel, Railway, Docker, etc"

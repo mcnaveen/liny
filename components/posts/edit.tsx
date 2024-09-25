@@ -103,7 +103,7 @@ export const EditPostSheet = ({
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update post"
+        error instanceof Error ? error.message : "Failed to update post",
       );
     },
   });
@@ -123,14 +123,14 @@ export const EditPostSheet = ({
             new MouseEvent("click") as unknown as React.MouseEvent<
               Element,
               MouseEvent
-            >
+            >,
           );
         }
         setOpen(isOpen);
       }}
     >
       <SheetContent
-        className="w-[400px] sm:w-[540px] h-[97%] m-4 rounded-lg"
+        className="m-4 h-[97%] w-[400px] rounded-lg sm:w-[540px]"
         onClick={(e) => {
           e.stopPropagation();
         }}

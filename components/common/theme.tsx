@@ -25,7 +25,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   return (
     <button
       aria-label="Toggle theme"
-      className={clsx("cursor-pointer w-full", className)}
+      className={clsx("w-full cursor-pointer", className)}
       onClick={onChange}
     >
       {theme === "light" || isSSR ? (

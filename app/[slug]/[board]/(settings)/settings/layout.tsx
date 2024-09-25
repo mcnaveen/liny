@@ -7,13 +7,13 @@ export default async function BoardLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="h-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="mx-auto h-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
       <div className="flex w-full">
-        <div className="w-full lg:w-[60%] mb-8 lg:mb-0 lg:sticky lg:top-20">
+        <div className="mb-8 w-full lg:sticky lg:top-20 lg:mb-0 lg:w-[60%]">
           <Tabs>
-          <TabsList >
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="permission">Permissions</TabsTrigger>
+            <TabsList>
+              <TabsTrigger value="general">General</TabsTrigger>
+              <TabsTrigger value="permission">Permissions</TabsTrigger>
             </TabsList>
             <TabsContent value="general">This is a General</TabsContent>
             <TabsContent value="permission">This is a Permission</TabsContent>

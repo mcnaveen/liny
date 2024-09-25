@@ -21,7 +21,7 @@ export default async function Home() {
   const isSelfHosted = process.env.SELFHOSTED === "true";
 
   return (
-    <div className="h-full py-4 sm:py-6 max-w-5xl mx-auto flex flex-col items-center justify-center space-y-4">
+    <div className="mx-auto flex h-full max-w-5xl flex-col items-center justify-center space-y-4 py-4 sm:py-6">
       <div className="flex flex-col items-center justify-center space-y-4">
         {isSelfHosted && session.user.isInstanceAdmin ? (
           <>

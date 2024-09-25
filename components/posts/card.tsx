@@ -49,21 +49,21 @@ export const PostsCard: React.FC<PostsCardProps> = ({
   );
 
   const ListLayout = () => (
-    <Card className="w-full border-gray-200 bg-white dark:bg-black dark:border-gray-800 border rounded-xl transition-[filter] data-[hover-state-enabled=true]:hover:drop-shadow-card-hover mb-2">
-      <CardHeader className="p-3 flex flex-row items-center gap-3">
-        <div className="flex justify-start items-center w-full">
-          <div className="flex-shrink-0 mr-2">
+    <Card className="data-[hover-state-enabled=true]:hover:drop-shadow-card-hover mb-2 w-full rounded-xl border border-gray-200 bg-white transition-[filter] dark:border-gray-800 dark:bg-black">
+      <CardHeader className="flex flex-row items-center gap-3 p-3">
+        <div className="flex w-full items-center justify-start">
+          <div className="mr-2 flex-shrink-0">
             <UpvoteButton
               isUpvoted={isUpvoted}
               postId={postData?.id}
               upvoteCount={upvoteCount}
             />
           </div>
-          <div className="flex-grow min-w-0">
-            <CardTitle className="text-base flex items-center gap-2 truncate">
+          <div className="min-w-0 flex-grow">
+            <CardTitle className="flex items-center gap-2 truncate text-base">
               {post.title}
             </CardTitle>
-            <div className="text-xs text-gray-500 mt-1 md:flex md:items-center md:gap-1">
+            <div className="mt-1 text-xs text-gray-500 md:flex md:items-center md:gap-1">
               <div className="flex items-center gap-1">
                 <span>{post.user.name}</span>
                 <span>•</span>
@@ -71,7 +71,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
                 <span>•</span>
                 <span>{postData?.replies?.length ?? 0} replies</span>
               </div>
-              <div className="flex items-center gap-1 mt-1 md:mt-0">
+              <div className="mt-1 flex items-center gap-1 md:mt-0">
                 <span className="md:inline">•</span>
                 <span
                   className={`${
@@ -82,7 +82,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
                         : postData?.status === "COMPLETED"
                           ? "text-green-700"
                           : ""
-                  } p-1 rounded-md`}
+                  } rounded-md p-1`}
                 >
                   {formatPostStatus(postData?.status as string)}
                 </span>
@@ -95,7 +95,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
               </div>
             </div>
           </div>
-          <div className="flex-shrink-0 ml-2">
+          <div className="ml-2 flex-shrink-0">
             <Options
               currentStatus={postData.status as string}
               currentUserId={currentUserId}
@@ -111,7 +111,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
   );
 
   const GridLayout = () => (
-    <Card className="h-full flex flex-col rounded-xl overflow-hidden">
+    <Card className="flex h-full flex-col overflow-hidden rounded-xl">
       <CardHeader className="p-4">
         <div className="flex items-start gap-4">
           <div>
@@ -121,7 +121,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
               })}
             </span>
 
-            <CardTitle className="text-lg flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
               {post.title}
             </CardTitle>
             <CardDescription className="mt-2">
@@ -130,15 +130,15 @@ export const PostsCard: React.FC<PostsCardProps> = ({
           </div>
         </div>
       </CardHeader>
-      <CardFooter className="p-4 bg-gray-50 dark:bg-gray-800">
-        <div className="flex items-center justify-between w-full text-sm">
+      <CardFooter className="bg-gray-50 p-4 dark:bg-gray-800">
+        <div className="flex w-full items-center justify-between text-sm">
           <div className="flex items-center gap-2">
             <UpvoteButton
               isUpvoted={isUpvoted}
               postId={post.id}
               upvoteCount={upvoteCount}
             />
-            <Avatar className="w-6 h-6">
+            <Avatar className="h-6 w-6">
               <AvatarImage
                 alt={post?.user?.name ?? "L"}
                 src={post?.user?.image!}

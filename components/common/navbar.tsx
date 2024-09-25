@@ -22,15 +22,15 @@ export const Navbar = () => {
   const { data: session } = useSession();
 
   return (
-    <nav className="sticky top-0 bg-white dark:bg-[#0A0A0A] z-10 border-b border-gray-200 dark:border-gray-800 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between h-16">
+    <nav className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 dark:border-gray-800 dark:bg-[#0A0A0A] sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
             <div className="flex items-center space-x-4">
               <Link className="flex-shrink-0" href="/">
                 <Image
                   alt="Liny Logo"
-                  className="rounded-full w-8 h-8"
+                  className="h-8 w-8 rounded-full"
                   height={32}
                   src={`${process.env.NEXT_PUBLIC_APP_URL}/liny-logo.svg`}
                   width={32}
@@ -38,7 +38,7 @@ export const Navbar = () => {
               </Link>
               {session?.user.isInstanceAdmin && <ProjectSwitcher />}
             </div>
-            <div className="hidden sm:block ml-10">
+            <div className="ml-10 hidden sm:block">
               {/* Add your navigation items here if needed */}
             </div>
           </div>
@@ -47,7 +47,7 @@ export const Navbar = () => {
               {session ? (
                 <DropdownMenu>
                   <DropdownMenuTrigger>
-                    <Avatar className="border-2 border-gradient-to-r from-[#FF1CF7] to-[#b249f8]">
+                    <Avatar className="border-gradient-to-r border-2 from-[#FF1CF7] to-[#b249f8]">
                       <AvatarImage src={session?.user.image!} />
                       <AvatarFallback>
                         {session?.user.name?.charAt(0)}
@@ -56,7 +56,7 @@ export const Navbar = () => {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
                     align="end"
-                    className="flex w-full flex-col space-y-px rounded-md bg-white dark:bg-black p-3 sm:w-56"
+                    className="flex w-full flex-col space-y-px rounded-md bg-white p-3 dark:bg-black sm:w-56"
                     sideOffset={8}
                   >
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>

@@ -6,7 +6,7 @@ interface MoonIconProps extends React.SVGProps<SVGSVGElement> {}
 export function MoonIcon(props: MoonIconProps) {
   return (
     <svg
-      className={cn("w-6 h-6", props.className)}
+      className={cn("h-6 w-6", props.className)}
       fill="currentColor"
       height="24"
       viewBox="0 0 24 24"

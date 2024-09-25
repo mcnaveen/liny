@@ -86,7 +86,9 @@ export default function Options({
     onSuccess: () => {
       toast.success("Post status updated successfully");
       queryClient.invalidateQueries({ queryKey: ["posts", postData.boardId] });
-      queryClient.invalidateQueries({ queryKey: ["posts", postData.boardId, postData.id] });
+      queryClient.invalidateQueries({
+        queryKey: ["posts", postData.boardId, postData.id],
+      });
     },
     onError: () => {
       toast.error("Failed to update post status");
@@ -119,18 +121,18 @@ export default function Options({
               setOpen(!open);
             }}
           >
-            <MoreHorizontal className="w-4 h-4" />
+            <MoreHorizontal className="h-4 w-4" />
           </Button>
         </PopoverTrigger>
         <PopoverContent align="end" className="w-48 p-0">
-          <div className="w-full flex flex-col">
+          <div className="flex w-full flex-col">
             <motion.div
               animate={{ opacity: 1 }}
               initial={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
             >
               <Button
-                className={`w-full flex items-center justify-start gap-2 px-3 py-2 ${
+                className={`flex w-full items-center justify-start gap-2 px-3 py-2 ${
                   currentStatus === "PLANNED"
                     ? "bg-yellow-100 text-yellow-700"
                     : ""
@@ -138,7 +140,7 @@ export default function Options({
                 variant="ghost"
                 onClick={handleStatusUpdate("PLANNED")}
               >
-                <NotebookPen className="w-4 h-4" />
+                <NotebookPen className="h-4 w-4" />
                 <span>Planned</span>
               </Button>
             </motion.div>
@@ -148,7 +150,7 @@ export default function Options({
               transition={{ duration: 0.2, delay: 0.1 }}
             >
               <Button
-                className={`w-full flex items-center justify-start gap-2 px-3 py-2 ${
+                className={`flex w-full items-center justify-start gap-2 px-3 py-2 ${
                   currentStatus === "IN_PROGRESS"
                     ? "bg-blue-100 text-blue-700"
                     : ""
@@ -156,7 +158,7 @@ export default function Options({
                 variant="ghost"
                 onClick={handleStatusUpdate("IN_PROGRESS")}
               >
-                <CircleDashed className="w-4 h-4" />
+                <CircleDashed className="h-4 w-4" />
                 <span>In Progress</span>
               </Button>
             </motion.div>
@@ -166,7 +168,7 @@ export default function Options({
               transition={{ duration: 0.2, delay: 0.2 }}
             >
               <Button
-                className={`w-full flex items-center justify-start gap-2 px-3 py-2 ${
+                className={`flex w-full items-center justify-start gap-2 px-3 py-2 ${
                   currentStatus === "COMPLETED"
                     ? "bg-green-100 text-green-700"
                     : ""
@@ -174,13 +176,13 @@ export default function Options({
                 variant="ghost"
                 onClick={handleStatusUpdate("COMPLETED")}
               >
-                <Check className="w-4 h-4" />
+                <Check className="h-4 w-4" />
                 <span>Completed</span>
               </Button>
             </motion.div>
             <Separator />
             <Button
-              className="w-full flex items-center justify-start gap-2 px-3 py-2"
+              className="flex w-full items-center justify-start gap-2 px-3 py-2"
               disabled={!(currentUserId === postAuthorId || hasAccess)}
               variant="ghost"
               onClick={(e) => {
@@ -189,20 +191,20 @@ export default function Options({
                 setEditOpen(true);
               }}
             >
-              <Pencil className="w-4 h-4" />
+              <Pencil className="h-4 w-4" />
               <span>Edit</span>
             </Button>
             <Button
               disabled
-              className="w-full flex items-center justify-start gap-2 px-3 py-2"
+              className="flex w-full items-center justify-start gap-2 px-3 py-2"
               variant="ghost"
             >
-              <Archive className="w-4 h-4" />
+              <Archive className="h-4 w-4" />
               <span>Archive</span>
             </Button>
             <AnimatePresence>
               {showDeleteConfirm ? (
-                <div className="w-full flex text-center">
+                <div className="flex w-full text-center">
                   <motion.div
                     animate={{ opacity: 1, scale: 1 }}
                     className="w-full"
@@ -211,12 +213,12 @@ export default function Options({
                     transition={{ duration: 0.2 }}
                   >
                     <Button
-                      className="w-full flex items-center gap-2 px-3 py-2 text-red-500"
+                      className="flex w-full items-center gap-2 px-3 py-2 text-red-500"
                       disabled={deleteMutation.isPending}
                       variant="ghost"
                       onClick={handleDelete}
                     >
-                      <Check className="w-4 h-4" />
+                      <Check className="h-4 w-4" />
                     </Button>
                   </motion.div>
                   <motion.div
@@ -227,7 +229,7 @@ export default function Options({
                     transition={{ duration: 0.2 }}
                   >
                     <Button
-                      className="w-full flex items-center gap-2 px-3 py-2"
+                      className="flex w-full items-center gap-2 px-3 py-2"
                       disabled={deleteMutation.isPending}
                       variant="ghost"
                       onClick={(e) => {
@@ -236,13 +238,13 @@ export default function Options({
                         setShowDeleteConfirm(false);
                       }}
                     >
-                      <X className="w-4 h-4" />
+                      <X className="h-4 w-4" />
                     </Button>
                   </motion.div>
                 </div>
               ) : (
                 <Button
-                  className="w-full flex items-center justify-start gap-2 px-3 py-2 text-red-500"
+                  className="flex w-full items-center justify-start gap-2 px-3 py-2 text-red-500"
                   disabled={deleteMutation.isPending}
                   variant="ghost"
                   onClick={(e) => {
@@ -251,7 +253,7 @@ export default function Options({
                     setShowDeleteConfirm(true);
                   }}
                 >
-                  <Trash className="w-4 h-4" />
+                  <Trash className="h-4 w-4" />
                   <span>Delete</span>
                 </Button>
               )}

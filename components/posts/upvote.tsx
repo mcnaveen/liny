@@ -73,7 +73,7 @@ export const UpvoteButton = ({
         variant="outline"
         onClick={session ? handleUpvote : handleLoginDialog}
       >
-        <ChevronUp className="w-4 h-4" />
+        <ChevronUp className="h-4 w-4" />
       </Button>
       <LoginDialog open={showLoginDialog} onOpenChange={setShowLoginDialog} />
     </>

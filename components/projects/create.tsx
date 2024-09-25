@@ -177,7 +177,7 @@ export const CreateProjectForm = ({
                 )}
               />
               <h3 className="mb-4 text-sm font-medium">Project Visibility</h3>
-              <div className="space-y-4 mb-4">
+              <div className="mb-4 space-y-4">
                 <FormField
                   control={form.control}
                   name="isPrivate"

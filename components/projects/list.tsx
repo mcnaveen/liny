@@ -27,7 +27,7 @@ export const ProjectsList = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex h-screen items-center justify-center">
         <Spinner />
       </div>
     );
@@ -35,8 +35,8 @@ export const ProjectsList = () => {
 
   if (data?.projects.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <LifebuoyIcon className="w-20 h-20 text-gray-700 mb-4" />
+      <div className="flex h-screen flex-col items-center justify-center">
+        <LifebuoyIcon className="mb-4 h-20 w-20 text-gray-700" />
         <h2 className="text-xl font-bold">No Projects Available</h2>
         <p className="text-gray-500">
           It seems there are no projects available.
@@ -46,7 +46,7 @@ export const ProjectsList = () => {
   }
 
   return (
-    <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:px-0 px-4">
+    <div className="mt-8 grid grid-cols-1 gap-4 px-4 sm:px-0 md:grid-cols-2 lg:grid-cols-3">
       {data?.projects.map((project) => (
         <Link key={project.id} className="w-full" href={`/${project.slug}`}>
           {/* TODO: handle isOwner based on the db data */}

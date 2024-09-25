@@ -54,14 +54,11 @@ export const BoardsList = ({
   if (isLoading) {
     return (
       <div
-        className={`
-          ${
-            view === "grid"
-              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4"
-              : ""
-          }
-          ${view === "list" ? "space-y-2" : ""}
-        `}
+        className={` ${
+          view === "grid"
+            ? "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2"
+            : ""
+        } ${view === "list" ? "space-y-2" : ""} `}
       >
         {[...Array(6)].map((_, index) => (
           <BoardShimmer key={index} layout={view} />
@@ -99,14 +96,11 @@ export const BoardsList = ({
       {filteredBoards.length ? (
         <>
           <motion.div
-            className={`
-              ${
-                view === "grid"
-                  ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4"
-                  : ""
-              }
-              ${view === "list" ? "space-y-2" : ""}
-            `}
+            className={` ${
+              view === "grid"
+                ? "grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-2"
+                : ""
+            } ${view === "list" ? "space-y-2" : ""} `}
           >
             {displayedBoards.map((board, index) => (
               <motion.div
@@ -126,22 +120,22 @@ export const BoardsList = ({
             ))}
           </motion.div>
           {filteredBoards.length > 4 && !showAll && (
-            <div className="mt-8 relative">
-              <Separator className="absolute top-1/2 left-0 w-full" />
+            <div className="relative mt-8">
+              <Separator className="absolute left-0 top-1/2 w-full" />
               <div className="relative flex justify-center">
                 <Badge
-                  className="text-xs bg-background cursor-pointer"
+                  className="cursor-pointer bg-background text-xs"
                   variant="outline"
                   onClick={() => setShowAllBoards(!showAllBoards)}
                 >
                   {showAllBoards ? (
                     <>
-                      <ChevronUp className="h-4 w-4 mr-2" />
+                      <ChevronUp className="mr-2 h-4 w-4" />
                       Less
                     </>
                   ) : (
                     <>
-                      <ChevronDown className="h-4 w-4 mr-2" />
+                      <ChevronDown className="mr-2 h-4 w-4" />
                       More
                     </>
                   )}
@@ -151,7 +145,7 @@ export const BoardsList = ({
           )}
         </>
       ) : (
-        <div className="p-8 rounded-lg shadow-sm text-center">
+        <div className="rounded-lg p-8 text-center shadow-sm">
           <p className="text-gray-500">
             No boards yet. Create one to get started!
           </p>

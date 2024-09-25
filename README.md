@@ -24,6 +24,7 @@ Liny is an open-source customer feedback management platform, designed as an alt
 To get started with Liny, please follow the instructions in the [Installation Guide](https://github.com/mcnaveen/liny/blob/main/docs/installation.md).
 
 ## Contributing
+
 Currently, we are not accepting contributions. Until the project is ready for production, we will only be making changes to the codebase as needed.
 
 <!-- We welcome contributions from the community! Please read the [Contribution Guidelines](https://github.com/mcnaveen/liny/blob/main/CONTRIBUTING.md) to get started. -->

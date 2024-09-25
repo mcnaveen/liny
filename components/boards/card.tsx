@@ -27,18 +27,18 @@ export const BoardsCard: React.FC<BoardsCardProps> = ({
 
   const ListLayout = () => (
     <Card
-      className={`w-full border-gray-200 dark:border-gray-800 border rounded-xl transition-[filter] data-[hover-state-enabled=true]:hover:drop-shadow-card-hover mb-2 ${
-        active ? "bg-gray-100 dark:bg-gray-900" : " bg-white dark:bg-black"
+      className={`data-[hover-state-enabled=true]:hover:drop-shadow-card-hover mb-2 w-full rounded-xl border border-gray-200 transition-[filter] dark:border-gray-800 ${
+        active ? "bg-gray-100 dark:bg-gray-900" : "bg-white dark:bg-black"
       }`}
     >
-      <CardHeader className="p-3 flex flex-row items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between p-3">
         <div className="flex flex-row items-center gap-2">
           {session && (
             <>
               {!board?.isPrivate ? (
-                <div className="h-2 w-2 bg-green-500 rounded-full" />
+                <div className="h-2 w-2 rounded-full bg-green-500" />
               ) : (
-                <div className="h-2 w-2 bg-red-500 rounded-full" />
+                <div className="h-2 w-2 rounded-full bg-red-500" />
               )}
             </>
           )}
@@ -47,7 +47,7 @@ export const BoardsCard: React.FC<BoardsCardProps> = ({
             {board.name.length > 28 ? "..." : ""}
           </h3>
         </div>
-        <div className="flex flex-row gap-2 items-center justify-between">
+        <div className="flex flex-row items-center justify-between gap-2">
           <Badge className="text-xs font-normal" variant="outline">
             {formatBoardType(board.boardType)}
           </Badge>
@@ -60,7 +60,7 @@ export const BoardsCard: React.FC<BoardsCardProps> = ({
   );
 
   const GridLayout = () => (
-    <Card className="h-full flex flex-col rounded-xl overflow-hidden bg-card">
+    <Card className="flex h-full flex-col overflow-hidden rounded-xl bg-card">
       <CardHeader className="p-4">
         <h3 className="text-lg font-bold">
           {board.name.substring(0, 28)}
@@ -74,12 +74,12 @@ export const BoardsCard: React.FC<BoardsCardProps> = ({
             : board.description}
         </p>
       </CardContent>
-      <CardFooter className="p-4 bg-secondary">
-        <div className="flex flex-row justify-between w-full">
+      <CardFooter className="bg-secondary p-4">
+        <div className="flex w-full flex-row justify-between">
           <div className="flex flex-row gap-2">
             {session && !board?.isPrivate && (
               <Badge
-                className="text-xs bg-green-200 text-green-900"
+                className="bg-green-200 text-xs text-green-900"
                 variant="outline"
               >
                 Public
@@ -87,7 +87,7 @@ export const BoardsCard: React.FC<BoardsCardProps> = ({
             )}
             {board?.isPrivate && (
               <Badge
-                className="text-xs bg-red-100 text-red-700"
+                className="bg-red-100 text-xs text-red-700"
                 variant="outline"
               >
                 Private

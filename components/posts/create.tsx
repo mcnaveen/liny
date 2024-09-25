@@ -98,13 +98,13 @@ export const CreatePostSheet = ({
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className="w-[400px] sm:w-[540px] h-[97%] m-4 rounded-lg">
+      <SheetContent className="m-4 h-[97%] w-[400px] rounded-lg sm:w-[540px]">
         <SheetHeader>
           <SheetTitle>Create Post</SheetTitle>
         </SheetHeader>
         <Form {...form}>
           <form
-            className="space-y-4 mt-4"
+            className="mt-4 space-y-4"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <FormField

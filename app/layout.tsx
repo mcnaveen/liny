@@ -34,7 +34,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`flex flex-col min-h-screen bg-gray-50/80 dark:bg-black`}
+        className={`flex min-h-screen flex-col bg-gray-50/80 dark:bg-black`}
       >
         <SessionProvider session={session}>
           <Provider themeProps={{ attribute: "class", defaultTheme: "dark" }}>

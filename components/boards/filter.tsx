@@ -41,9 +41,9 @@ export const BoardFilter = () => {
     <Popover>
       <PopoverTrigger className="relative">
         <Button disabled={!session} size="icon" variant="outline">
-          <Filter className="w-4 h-4" />
+          <Filter className="h-4 w-4" />
           {activeFiltersCount > 0 && (
-            <div className="absolute top-0 right-0 ml-1 text-xs text-white bg-blue-500 dark:bg-blue-700 rounded-full px-1">
+            <div className="absolute right-0 top-0 ml-1 rounded-full bg-blue-500 px-1 text-xs text-white dark:bg-blue-700">
               {activeFiltersCount}
             </div>
           )}

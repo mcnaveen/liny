@@ -17,7 +17,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="h-full py-4 sm:py-6 max-w-7xl mx-auto flex flex-col items-center justify-center space-y-4">
+    <div className="mx-auto flex h-full max-w-7xl flex-col items-center justify-center space-y-4 py-4 sm:py-6">
       <div className="flex flex-col items-center justify-center space-y-4">
         <Image
           alt="Liny Logo"
@@ -34,7 +34,7 @@ export default function LoginPage() {
           signIn("github");
         }}
       >
-        <GithubIcon className="w-4 h-4 mr-2" />
+        <GithubIcon className="mr-2 h-4 w-4" />
         Login with GitHub
       </Button>
       <Button
@@ -43,7 +43,7 @@ export default function LoginPage() {
           signIn("email");
         }}
       >
-        <Mail className="w-4 h-4 mr-2" />
+        <Mail className="mr-2 h-4 w-4" />
         Login with Email
       </Button>
       <p className="text-sm text-gray-500">Privacy first, open source.</p>

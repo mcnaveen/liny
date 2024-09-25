@@ -47,7 +47,7 @@ export const ReplyCard = ({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center space-x-2 group">
+      <div className="group flex items-center space-x-2">
         <Avatar className="h-[34px] w-[34px]">
           <AvatarImage className="h-full w-full" src={reply.user.image!} />
           <AvatarFallback className="h-full w-full">
@@ -69,7 +69,7 @@ export const ReplyCard = ({
               <>
                 <span className="hidden group-hover:inline">•</span>
                 <span
-                  className="text-xs text-gray-500 cursor-pointer hidden group-hover:inline group-hover:transition-all group-hover:duration-300"
+                  className="hidden cursor-pointer text-xs text-gray-500 group-hover:inline group-hover:transition-all group-hover:duration-300"
                   role="button"
                   tabIndex={0}
                   onClick={handleReplyClick}
@@ -81,7 +81,7 @@ export const ReplyCard = ({
             )}
             <span className="hidden group-hover:inline">•</span>
             <span
-              className="text-xs text-gray-500 cursor-pointer hidden group-hover:inline group-hover:transition-all group-hover:duration-300"
+              className="hidden cursor-pointer text-xs text-gray-500 group-hover:inline group-hover:transition-all group-hover:duration-300"
               role="button"
               tabIndex={0}
             >
@@ -89,7 +89,7 @@ export const ReplyCard = ({
             </span>
             <span className="hidden group-hover:inline">•</span>
             <span
-              className="text-xs text-gray-500 cursor-pointer hidden group-hover:inline group-hover:transition-all group-hover:duration-300 hover:text-red-500"
+              className="hidden cursor-pointer text-xs text-gray-500 hover:text-red-500 group-hover:inline group-hover:transition-all group-hover:duration-300"
               role="button"
               tabIndex={0}
             >
@@ -100,7 +100,7 @@ export const ReplyCard = ({
         </div>
       </div>
       {showReplyBox && (
-        <div className="m-8 ml-14 bg-gray-50 dark:bg-gray-800 p-4 rounded-xl border-l-2 border-gray-100 dark:border-gray-700 rounded-tl-none">
+        <div className="m-8 ml-14 rounded-xl rounded-tl-none border-l-2 border-gray-100 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
           <Reply
             boardId={boardId}
             parentId={reply.id}

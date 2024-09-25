@@ -22,15 +22,15 @@ interface RecentItem {
 }
 
 const ShimmerItem = () => (
-  <div className="flex items-center justify-between py-4 px-4 animate-pulse">
+  <div className="flex animate-pulse items-center justify-between px-4 py-4">
     <div className="flex items-center space-x-2">
-      <div className="w-6 h-6 bg-gray-300 rounded-full" />
+      <div className="h-6 w-6 rounded-full bg-gray-300" />
       <div>
-        <div className="h-4 w-40 bg-gray-300 rounded" />
-        <div className="h-3 w-24 bg-gray-300 rounded mt-2" />
+        <div className="h-4 w-40 rounded bg-gray-300" />
+        <div className="mt-2 h-3 w-24 rounded bg-gray-300" />
       </div>
     </div>
-    <div className="w-8 h-8 bg-gray-300 rounded" />
+    <div className="h-8 w-8 rounded bg-gray-300" />
   </div>
 );
 
@@ -55,7 +55,7 @@ export const Recent = ({ projectId }: { projectId: string }) => {
   if (error) return <div>Error loading recent items</div>;
 
   return (
-    <Card className="mt-4 border border-slate-200 dark:border-slate-700 rounded-lg">
+    <Card className="mt-4 rounded-lg border border-slate-200 dark:border-slate-700">
       <CardContent className="p-0">
         {isLoading ? (
           Array(8)
@@ -65,24 +65,24 @@ export const Recent = ({ projectId }: { projectId: string }) => {
           recentItems.map((item, index) => (
             <div
               key={item.id}
-              className={`flex items-center justify-between py-4 px-4 ${
+              className={`flex items-center justify-between px-4 py-4 ${
                 index !== recentItems.length - 1
                   ? "border-b border-gray-200 dark:border-slate-700"
                   : ""
               }`}
             >
               <div className="flex items-center space-x-2">
-                <Avatar className="w-6 h-6">
+                <Avatar className="h-6 w-6">
                   <AvatarImage
                     alt={item.user.name}
                     src={item.user.image || undefined}
                   />
                   <AvatarFallback>
-                    {item?.user.name && item?.user.name.charAt(0) || "X"}
+                    {(item?.user.name && item?.user.name.charAt(0)) || "X"}
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <h3 className="text-sm font-medium truncate text-ellipsis">
+                  <h3 className="truncate text-ellipsis text-sm font-medium">
                     {item.title.substring(0, 40)}
                     {item.title.length > 40 ? "..." : ""}
                   </h3>
@@ -110,20 +110,20 @@ export const Recent = ({ projectId }: { projectId: string }) => {
               </div>
               <span className="text-gray-400">
                 <Button
-                  className="w-8 h-8 p-0 hover:bg-transparent"
+                  className="h-8 w-8 p-0 hover:bg-transparent"
                   size="icon"
                   variant="ghost"
                   onClick={() => {
                     alert("more");
                   }}
                 >
-                  <MoreVertical className="w-4 h-4" />
+                  <MoreVertical className="h-4 w-4" />
                 </Button>
               </span>
             </div>
           ))
         ) : (
-          <div className="py-4 px-4 text-gray-500 text-center">
+          <div className="px-4 py-4 text-center text-gray-500">
             No recent items available.
           </div>
         )}

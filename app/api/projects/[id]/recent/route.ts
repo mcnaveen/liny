@@ -4,14 +4,14 @@ import { db } from "@/lib/db";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   const projectId = params.id;
 
   if (!projectId) {
     return NextResponse.json(
       { error: "Project ID is required" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 

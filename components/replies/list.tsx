@@ -24,12 +24,12 @@ interface Reply {
 }
 
 const Shimmer = () => (
-  <div className="flex items-center space-x-4 animate-pulse">
-    <div className="h-10 w-10 bg-gray-200 rounded-full" />
+  <div className="flex animate-pulse items-center space-x-4">
+    <div className="h-10 w-10 rounded-full bg-gray-200" />
     <div className="flex-1 space-y-4">
-      <div className="h-4 bg-gray-200 rounded w-3/4" />
-      <div className="h-4 bg-gray-200 rounded w-5/6" />
-      <div className="h-4 bg-gray-200 rounded w-1/2" />
+      <div className="h-4 w-3/4 rounded bg-gray-200" />
+      <div className="h-4 w-5/6 rounded bg-gray-200" />
+      <div className="h-4 w-1/2 rounded bg-gray-200" />
     </div>
   </div>
 );
@@ -54,7 +54,7 @@ const ReplyTree = ({
       reply={reply}
     />
     {reply.children && reply.children.length > 0 && (
-      <div className="mt-2 ml-4 pl-4 border-l-2 border-gray-100 dark:border-gray-700">
+      <div className="ml-4 mt-2 border-l-2 border-gray-100 pl-4 dark:border-gray-700">
         {reply.children.map((childReply) => (
           <div key={childReply.id} className="mt-2">
             <ReplyCard

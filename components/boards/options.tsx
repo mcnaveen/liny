@@ -47,7 +47,7 @@ export const BoardOptions = () => {
     <Popover>
       <PopoverTrigger>
         <Button size="icon" variant="secondary">
-          <EllipsisVertical className="w-4 h-4" />
+          <EllipsisVertical className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
       <PopoverContent
@@ -99,7 +99,7 @@ export const BoardOptions = () => {
               <motion.div
                 key="confirm"
                 animate="animate"
-                className="flex gap-2 w-full"
+                className="flex w-full gap-2"
                 exit="exit"
                 initial="initial"
                 transition={transition}
@@ -109,7 +109,7 @@ export const BoardOptions = () => {
                   {deleteState === "initial" && (
                     <motion.div
                       key="confirmButtons"
-                      className="flex gap-2 w-full"
+                      className="flex w-full gap-2"
                       exit={{ opacity: 0 }}
                       initial={{ opacity: 1 }}
                       transition={{ duration: 0.2 }}

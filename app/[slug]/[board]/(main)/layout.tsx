@@ -40,16 +40,16 @@ export default async function BoardLayout({
   }
 
   return (
-    <div className="h-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="mx-auto h-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
       <div className="mb-8 rounded-lg">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 space-y-4 sm:space-y-0">
+        <div className="mb-4 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex items-center space-x-4">
-            <h1 className="text-xl sm:text-2xl font-bold">{board.name}</h1>
+            <h1 className="text-xl font-bold sm:text-2xl">{board.name}</h1>
             <Badge variant="outline">
               {formatBoardType(board.boardType as string)}
             </Badge>
           </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
+          <div className="flex flex-col items-start space-y-2 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
             <Input
               disabled
               className="w-full sm:w-auto"
@@ -68,8 +68,8 @@ export default async function BoardLayout({
         </div>
         <p className="text-gray-600">{board.description}</p>
       </div>
-      <section className="flex flex-col lg:flex-row lg:space-x-8 space-y-8 lg:space-y-0">
-        <div className="w-full lg:w-1/3 lg:sticky lg:top-20">
+      <section className="flex flex-col space-y-8 lg:flex-row lg:space-x-8 lg:space-y-0">
+        <div className="w-full lg:sticky lg:top-20 lg:w-1/3">
           <div className="flex flex-col space-y-4">
             <BoardsList
               activeBoard={board.id}

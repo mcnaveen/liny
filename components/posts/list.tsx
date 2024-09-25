@@ -69,7 +69,7 @@ export function PostsList({
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex h-64 items-center justify-center">
         <Spinner />
       </div>
     );
@@ -79,26 +79,22 @@ export function PostsList({
 
   // Sort posts by createdAt in descending order
   const sortedPosts = [...posts].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 
   return (
     <>
       {sortedPosts.length ? (
         <motion.div
-          className={`
-            ${
-              view === "compact"
-                ? "border border-gray-200 dark:border-gray-800 rounded-xl bg-white overflow-hidden"
-                : ""
-            }
-            ${
-              view === "grid"
-                ? `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${cols} gap-4`
-                : ""
-            }
-            ${view === "list" ? "space-y-2" : ""}
-          `}
+          className={` ${
+            view === "compact"
+              ? "overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800"
+              : ""
+          } ${
+            view === "grid"
+              ? `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-${cols} gap-4`
+              : ""
+          } ${view === "list" ? "space-y-2" : ""} `}
         >
           {sortedPosts.map((post, index) => (
             <motion.div
@@ -126,7 +122,7 @@ export function PostsList({
           ))}
         </motion.div>
       ) : (
-        <div className="p-8 rounded-lg shadow-sm text-center">
+        <div className="rounded-lg p-8 text-center shadow-sm">
           <p className="text-gray-500">
             No posts yet. Create one to get started!
           </p>

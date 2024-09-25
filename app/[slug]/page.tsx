@@ -25,7 +25,7 @@ export async function generateMetadata({
   params: { slug: string };
 }) {
   const project = (await findProjectBySlug(params.slug)) as Project | null;
-  
+
   return {
     title: project?.name,
   };
@@ -53,9 +53,9 @@ export default async function ProjectPage({
   }
 
   return (
-    <div className="h-auto py-4 sm:py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto overflow-hidden">
+    <div className="mx-auto h-auto max-w-7xl overflow-hidden px-4 py-4 sm:px-6 sm:py-6 lg:px-8">
       <div>
-        <header className="mb-8 flex flex-col sm:flex-row justify-between items-center gap-4">
+        <header className="mb-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
           {session && hasAccess && (
             <>
               <Input
@@ -63,7 +63,7 @@ export default async function ProjectPage({
                 className="w-full sm:w-auto"
                 placeholder="Search boards... (Coming Soon)"
               />
-              <section className="w-full sm:w-auto flex flex-wrap justify-center sm:justify-end gap-2 items-center">
+              <section className="flex w-full flex-wrap items-center justify-center gap-2 sm:w-auto sm:justify-end">
                 <Suspense fallback={<Spinner />}>
                   <BoardFilter />
                   <ProjectOptions />
@@ -76,17 +76,17 @@ export default async function ProjectPage({
           )}
         </header>
         <main>
-          <section className="flex flex-col lg:flex-row lg:space-x-8 justify-around">
+          <section className="flex flex-col justify-around lg:flex-row lg:space-x-8">
             {session && hasAccess && (
-              <div className="w-full lg:w-[60%] mb-8 lg:mb-0 lg:sticky lg:top-20">
+              <div className="mb-8 w-full lg:sticky lg:top-20 lg:mb-0 lg:w-[60%]">
                 <span className="text-md mb-4 block">Recent Activity</span>
                 <Recent projectId={project.id} />
               </div>
             )}
-            <div className="w-full ">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+            <div className="w-full">
+              <div className="mb-4 flex flex-col items-start justify-between sm:flex-row sm:items-center">
                 <div>
-                  <span className="text-md block mb-2 sm:mb-0">Boards</span>
+                  <span className="text-md mb-2 block sm:mb-0">Boards</span>
                 </div>
                 {hasAccess && <BoardView />}
               </div>
@@ -100,7 +100,7 @@ export default async function ProjectPage({
               </div>
               {!hasAccess && (
                 <div className="mt-8">
-                  <span className="text-sm mb-4 block">Roadmap</span>
+                  <span className="mb-4 block text-sm">Roadmap</span>
                   <div className="mt-4">
                     <Suspense fallback={<Spinner />}>
                       <Roadmap projectId={project.id} />

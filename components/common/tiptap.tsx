@@ -34,9 +34,9 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ onChange }) => {
   );
 
   return (
-    <div className="p-4 border border-gray-300 dark:border-gray-800 rounded-lg shadow-md bg-white dark:bg-black">
+    <div className="rounded-lg border border-gray-300 bg-white p-4 shadow-md dark:border-gray-800 dark:bg-black">
       {/* Toolbar */}
-      <div className="flex space-x-2 mb-4">
+      <div className="mb-4 flex space-x-2">
         <Button
           size="icon"
           onClick={(e) => {
@@ -44,7 +44,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ onChange }) => {
             handleBold();
           }}
         >
-          <Bold className="w-4 h-4" />
+          <Bold className="h-4 w-4" />
         </Button>
         <Button
           size="icon"
@@ -53,7 +53,7 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ onChange }) => {
             handleItalic();
           }}
         >
-          <Italic className="w-4 h-4" />
+          <Italic className="h-4 w-4" />
         </Button>
         <Button
           size="icon"
@@ -62,13 +62,13 @@ const TiptapEditor: React.FC<TiptapEditorProps> = ({ onChange }) => {
             handleBulletList();
           }}
         >
-          <List className="w-4 h-4" />
+          <List className="h-4 w-4" />
         </Button>
       </div>
 
       {/* Editor Content */}
       <EditorContent
-        className="prose prose-sm max-w-full p-2 border border-gray-300 rounded bg-white focus:outline-none"
+        className="prose prose-sm max-w-full rounded border border-gray-300 bg-white p-2 focus:outline-none"
         editor={editor}
       />
     </div>
