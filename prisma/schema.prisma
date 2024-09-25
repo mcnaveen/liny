@@ -1,0 +1,350 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Account {
+  id                       String  @id @default(cuid())
+  userId                   String  @unique
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
+  refresh_token_expires_in Int?
+  user                     User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model User {
+  id              String    @id @default(cuid())
+  name            String?   @unique
+  username        String?   @unique
+  email           String?   @unique
+  emailVerified   DateTime?
+  image           String?
+  isActive        Boolean   @default(true)
+  isInstanceAdmin Boolean   @default(false)
+  instanceId      String?
+  instance        Instance? @relation(fields: [instanceId], references: [id])
+  accounts        Account[]
+  sessions        Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  invites      Invite[]
+  upvotes      Upvote[]
+  projectUsers ProjectUser[]
+  projects     Project[]
+  posts        Post[]
+  replies      Reply[]
+  categories   Category[]
+  boards       Board[]
+  boardUsers   BoardUser[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Instance {
+  id             String           @id @default(cuid())
+  isSelfHosted   Boolean          @default(false)
+  allowedDomains String[] // Store allowed email domains
+  allowedEmails  String[] // Store specific allowed emails
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  users          User[]
+  AllowedDomains AllowedDomains[]
+  AllowedEmails  AllowedEmails[]
+}
+
+model AllowedDomains {
+  id         String   @id @default(cuid())
+  domain     String
+  instanceId String
+  instance   Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([instanceId, domain])
+}
+
+model AllowedEmails {
+  id         String   @id @default(cuid())
+  email      String
+  instanceId String
+  instance   Instance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([instanceId, email])
+}
+
+model Project {
+  id           String        @id @default(cuid())
+  name         String
+  description  String?
+  userId       String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  slug         String        @unique
+  isPrivate    Boolean       @default(false)
+  integrations Integration[]
+  projectUsers ProjectUser[]
+  boards       Board[]
+  posts        Post[]
+  replies      Reply[]
+  upvotes      Upvote[]
+  attachments  Attachment[]
+  invites      Invite[]
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Board {
+  id          String        @id @default(cuid())
+  name        String
+  description String
+  userId      String
+  slug        String        @unique
+  boardType   BoardPostType @default(FEATURE_REQUEST)
+  isPrivate   Boolean       @default(false)
+  projectId   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  posts       Post[]
+  replies     Reply[]
+  upvotes     Upvote[]
+  attachments Attachment[]
+
+  project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  boardUsers BoardUser[]
+
+  @@index([projectId])
+}
+
+model Post {
+  id          String        @id @default(cuid())
+  title       String
+  description String?
+  body        Json?
+  slug        String        @unique
+  postType    BoardPostType
+  status      PostStatus?   @default(OPEN)
+  priority    Int?          @default(0)
+  userId      String
+  projectId   String
+  boardId     String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  attachments Attachment[]
+  tags        Tag[]         @relation("PostTags")
+
+  replies Reply[]
+  upvotes Upvote[]
+
+  board      Board      @relation(fields: [boardId], references: [id])
+  project    Project    @relation(fields: [projectId], references: [id])
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categories Category[]
+}
+
+model Reply {
+  id          String       @id @default(cuid())
+  body        String
+  postId      String?
+  boardId     String?
+  userId      String
+  projectId   String?
+  parentId    String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  post        Post?        @relation(fields: [postId], references: [id])
+  attachments Attachment[]
+  upvotes     Upvote[]
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  board   Board?   @relation(fields: [boardId], references: [id])
+  project Project? @relation(fields: [projectId], references: [id])
+}
+
+model Upvote {
+  id        String   @id @default(cuid())
+  postId    String?
+  replyId   String?
+  userId    String
+  boardId   String?
+  projectId String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  post    Post?    @relation(fields: [postId], references: [id])
+  reply   Reply?   @relation(fields: [replyId], references: [id])
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  board   Board?   @relation(fields: [boardId], references: [id])
+  project Project? @relation(fields: [projectId], references: [id])
+
+  @@unique([postId, userId])
+  @@unique([replyId, userId])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  color       String
+  postId      String
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  post Post @relation(fields: [postId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Attachment {
+  id        String   @id @default(cuid())
+  name      String
+  url       String
+  postId    String?
+  replyId   String?
+  boardId   String?
+  projectId String?
+  post      Post?    @relation(fields: [postId], references: [id])
+  reply     Reply?   @relation(fields: [replyId], references: [id])
+  board     Board?   @relation(fields: [boardId], references: [id])
+  project   Project? @relation(fields: [projectId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts Post[] @relation("PostTags")
+}
+
+model Invite {
+  id        String       @id @default(cuid())
+  email     String
+  userId    String
+  projectId String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  expiresAt DateTime
+  status    InviteStatus
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Integration {
+  id        String          @id @default(cuid())
+  name      String
+  type      IntegrationType
+  url       String?
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  projectId String
+  project   Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model ProjectUser {
+  id        String           @id @default(cuid())
+  userId    String
+  projectId String
+  role      ProjectBoardRole
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  bio       String?
+  image     String?
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model BoardUser {
+  id        String           @id @default(cuid())
+  userId    String
+  boardId   String
+  role      ProjectBoardRole
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  board     Board            @relation(fields: [boardId], references: [id])
+}
+
+enum ProjectBoardRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum BoardPostType {
+  ISSUE
+  FEATURE_REQUEST
+  CHANGELOG
+}
+
+enum PostStatus {
+  OPEN
+  UNDER_REVIEW
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CLOSED
+}
+
+enum IntegrationType {
+  GITHUB
+  GITLAB
+  JIRA
+  SLACK
+  EMAIL
+  WEBHOOK
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REJECTED
+}
