@@ -3,6 +3,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+
 import { UpvoteButton } from "../posts/upvote";
 
 export const Roadmap = async ({ projectId }: { projectId: string }) => {
@@ -40,12 +41,6 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
       },
     },
   });
-
-  // Calculate upvote count for each post
-  const roadmapWithUpvoteCount = roadmap.map((post) => ({
-    ...post,
-    upvoteCount: post.upvotes.length, // Count the number of upvotes
-  }));
 
   const columns = {
     PLANNED: roadmap.filter((post: any) => post.status === "PLANNED"),

@@ -3,10 +3,10 @@
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Mail } from "lucide-react";
 
 import { GithubIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { Mail } from "lucide-react";
 
 export default function LoginPage() {
   const session = useSession();

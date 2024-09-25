@@ -107,6 +107,7 @@ export function PostsList({
                 href={`/${post?.project.slug}/${post.board.slug}/${post.slug}/${post.id}`}
               >
                 <PostsCard
+                  currentStatus={post.status}
                   currentUserId={currentUserId}
                   hasAccess={hasAccess}
                   layout={view}
@@ -115,7 +116,6 @@ export function PostsList({
                   postType={post.postType}
                   /* @ts-ignore */
                   user={post.user!}
-                  currentStatus={post.status}
                 />
               </Link>
             </motion.div>

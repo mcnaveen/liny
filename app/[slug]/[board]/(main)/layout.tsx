@@ -9,11 +9,11 @@ import { Badge } from "@/components/ui/badge";
 import { BoardView } from "@/components/boards/view";
 import { CreatePost } from "@/components/posts/create";
 import { Input } from "@/components/ui/input";
+import { BoardOptions } from "@/components/boards/options";
 
 import PrivateBoard from "../../private";
 
 import NotFound from "./not-found";
-import { BoardOptions } from "@/components/boards/options";
 
 export default async function BoardLayout({
   children,
