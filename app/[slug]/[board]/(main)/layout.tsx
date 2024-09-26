@@ -14,6 +14,8 @@ import { BoardOptions } from "@/components/boards/options";
 import PrivateBoard from "../../private";
 
 import NotFound from "./not-found";
+import { Board } from "@/types/board";
+import { Project } from "@/types/project";
 
 export default async function BoardLayout({
   children,
@@ -22,7 +24,9 @@ export default async function BoardLayout({
   children: React.ReactNode;
   params: { board: string; slug: string };
 }) {
-  const board = await findBoardBySlug(params.board);
+  const board = (await findBoardBySlug(params.board)) as
+    | (Board & { projectId: string })
+    | null;
   const session = await getServerSession(authOptions);
 
   if (!board) {
@@ -31,13 +35,10 @@ export default async function BoardLayout({
 
   const hasAccess = await checkUserAccess({
     userId: session?.user?.id,
-    //@ts-ignore
     projectId: board.projectId,
-    //@ts-ignore
     boardId: board.id,
   });
 
-  //@ts-ignore
   if (board.isPrivate && !hasAccess) {
     return <PrivateBoard type="board" />;
   }
@@ -47,10 +48,8 @@ export default async function BoardLayout({
       <div className="mb-8 rounded-lg">
         <div className="mb-4 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex items-center space-x-4">
-            {/* @ts-ignore */}
             <h1 className="text-xl font-bold sm:text-2xl">{board.name}</h1>
             <Badge variant="outline">
-              {/* @ts-ignore */}
               {formatBoardType(board.boardType as string)}
             </Badge>
           </div>
@@ -61,29 +60,23 @@ export default async function BoardLayout({
               placeholder="Search Posts (Coming Soon)"
             />
             <BoardView />
-            {session && (
+            <BoardOptions />
+            {session ? (
               <CreatePost
-                //@ts-ignore
                 boardId={board.id as string}
-                //@ts-ignore
                 projectId={board.projectId as string}
                 text="New Post"
               />
-            )}
-            <BoardOptions />
+            ) : null}
           </div>
         </div>
-        {/* @ts-ignore */}
         <p className="text-gray-600">{board.description}</p>
       </div>
       <section className="flex flex-col space-y-8 lg:flex-row lg:space-x-8 lg:space-y-0">
         <div className="w-full lg:sticky lg:top-20 lg:w-1/3">
           <div className="flex flex-col space-y-4">
-            {/* @ts-ignore */}
             <BoardsList
-              //@ts-ignore
               activeBoard={board.id}
-              //@ts-ignore
               projectId={board.projectId}
               projectSlug={params.slug}
               showAll={false}

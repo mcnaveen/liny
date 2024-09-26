@@ -64,13 +64,11 @@ export default async function ProjectPage({
                 placeholder="Search boards... (Coming Soon)"
               />
               <section className="flex w-full flex-wrap items-center justify-center gap-2 sm:w-auto sm:justify-end">
-                <Suspense fallback={<Spinner />}>
-                  <BoardFilter />
-                  <ProjectOptions />
-                  {session.user.isInstanceAdmin && (
-                    <CreateBoard projectId={project.id} />
-                  )}
-                </Suspense>
+                <BoardFilter />
+                <ProjectOptions />
+                {session.user.isInstanceAdmin && (
+                  <CreateBoard projectId={project.id} />
+                )}
               </section>
             </>
           )}
@@ -102,9 +100,7 @@ export default async function ProjectPage({
                 <div className="mt-8">
                   <span className="mb-4 block text-sm">Roadmap</span>
                   <div className="mt-4">
-                    <Suspense fallback={<Spinner />}>
-                      <Roadmap projectId={project.id} />
-                    </Suspense>
+                    <Roadmap projectId={project.id} />
                   </div>
                 </div>
               )}

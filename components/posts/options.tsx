@@ -27,20 +27,15 @@ import { Separator } from "@/components/ui/separator";
 import { EditPostForm } from "./edit";
 
 interface OptionsProps {
-  postId: string;
   currentUserId: string;
-  postAuthorId: string;
   hasAccess: boolean;
-  currentStatus: string;
-  postData: Post;
+  post: Post;
 }
 
 export default function Options({
-  postData,
+  post,
   currentUserId,
-  postAuthorId,
   hasAccess,
-  currentStatus,
 }: OptionsProps) {
   const [open, setOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
@@ -49,7 +44,7 @@ export default function Options({
 
   const deleteMutation = useMutation({
     mutationFn: async () => {
-      const response = await fetch(`/api/posts/${postData.id}`, {
+      const response = await fetch(`/api/posts/${post.id}`, {
         method: "DELETE",
       });
 
@@ -69,7 +64,7 @@ export default function Options({
 
   const updateStatusMutation = useMutation({
     mutationFn: async (status: string) => {
-      const response = await fetch(`/api/posts/${postData.id}`, {
+      const response = await fetch(`/api/posts/${post.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -85,9 +80,9 @@ export default function Options({
     },
     onSuccess: () => {
       toast.success("Post status updated successfully");
-      queryClient.invalidateQueries({ queryKey: ["posts", postData.boardId] });
+      queryClient.invalidateQueries({ queryKey: ["posts", post.boardId] });
       queryClient.invalidateQueries({
-        queryKey: ["posts", postData.boardId, postData.id],
+        queryKey: ["posts", post.boardId, post.id],
       });
     },
     onError: () => {
@@ -106,7 +101,7 @@ export default function Options({
       e.stopPropagation();
       e.preventDefault();
       updateStatusMutation.mutate(status);
-      queryClient.invalidateQueries({ queryKey: ["post", postData.id] });
+      queryClient.invalidateQueries({ queryKey: ["post", post.id] });
     };
 
   return (
@@ -133,7 +128,7 @@ export default function Options({
             >
               <Button
                 className={`flex w-full items-center justify-start gap-2 px-3 py-2 ${
-                  currentStatus === "PLANNED"
+                  post.status === "PLANNED"
                     ? "bg-yellow-100 text-yellow-700"
                     : ""
                 } rounded-none`}
@@ -151,7 +146,7 @@ export default function Options({
             >
               <Button
                 className={`flex w-full items-center justify-start gap-2 px-3 py-2 ${
-                  currentStatus === "IN_PROGRESS"
+                  post.status === "IN_PROGRESS"
                     ? "bg-blue-100 text-blue-700"
                     : ""
                 } rounded-none`}
@@ -169,7 +164,7 @@ export default function Options({
             >
               <Button
                 className={`flex w-full items-center justify-start gap-2 px-3 py-2 ${
-                  currentStatus === "COMPLETED"
+                  post.status === "COMPLETED"
                     ? "bg-green-100 text-green-700"
                     : ""
                 } rounded-none`}
@@ -183,7 +178,7 @@ export default function Options({
             <Separator />
             <Button
               className="flex w-full items-center justify-start gap-2 px-3 py-2"
-              disabled={!(currentUserId === postAuthorId || hasAccess)}
+              disabled={!(currentUserId === post.userId || hasAccess)}
               variant="ghost"
               onClick={(e) => {
                 e.stopPropagation();
@@ -263,7 +258,7 @@ export default function Options({
       </Popover>
       <EditPostForm
         open={editOpen}
-        postData={postData}
+        postData={post}
         setOpen={(isOpen) => {
           setEditOpen(isOpen);
           if (!isOpen) {

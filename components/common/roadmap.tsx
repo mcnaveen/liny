@@ -4,7 +4,7 @@ import { db } from "@/lib/db";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 
-import { UpvoteButton } from "../posts/upvote";
+import { UpvoteButton } from "@/components/posts/upvote";
 
 export const Roadmap = async ({ projectId }: { projectId: string }) => {
   const roadmap = await db.post.findMany({
@@ -49,7 +49,7 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 bg-card md:flex-row">
+    <div className="mb-8 flex flex-col gap-4 md:flex-row">
       {Object.entries(columns).map(([status, posts]) => (
         <div key={status} className="mb-4 flex-1 rounded-lg border p-4 md:mb-0">
           <h3 className="mb-4 flex items-center font-semibold">
@@ -81,8 +81,10 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
                       <CardTitle className="ml-2 font-sans text-sm font-medium">
                         {post.title}
                       </CardTitle>
-                      <CardDescription className="ml-2 text-xs uppercase text-muted-foreground">
-                        {post.board.name}
+                      <CardDescription className="ml-2 mt-1 text-xs uppercase text-muted-foreground">
+                        {post.board.name}{" "}
+                        <span className="text-xs text-muted-foreground">•</span>{" "}
+                        {post.upvotes.length} votes
                       </CardDescription>
                     </div>
                   </div>

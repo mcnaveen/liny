@@ -1,7 +1,6 @@
-import { Post, User } from "@prisma/client";
+import { Post, Reply, User } from "@prisma/client";
 import { BoardPostType } from "@prisma/client";
 import { formatDistance } from "date-fns";
-import { useQuery } from "@tanstack/react-query";
 
 import {
   Card,
@@ -16,15 +15,18 @@ import { formatPostStatus } from "@/helpers/common/formatPostStatus";
 
 import { UpvoteButton } from "./upvote";
 import Options from "./options";
+import { Upvote } from "@/types/upvote";
 
 interface PostsCardProps {
   post: Post & {
-    user: User;
-    project: { name: string };
-    board: { name: string };
-    upvotes: { userId: string; isActive: boolean }[];
+    user: User & {
+      id: string;
+      name: string;
+      image: string | null;
+    };
+    upvotes: Upvote[];
     upvoteCount: number;
-    replies: { id: string }[];
+    replies: Reply[];
   };
   postType: BoardPostType;
   layout: "compact" | "list" | "grid";
@@ -37,14 +39,8 @@ export const PostsCard: React.FC<PostsCardProps> = ({
   layout = "compact",
   currentUserId,
 }) => {
-  const { data: postData } = useQuery({
-    queryKey: ["posts", post.boardId, post.id],
-    initialData: post,
-    refetchOnWindowFocus: false,
-  });
-
-  const upvoteCount = postData?.upvoteCount ? postData.upvoteCount : 0;
-  const isUpvoted = postData?.upvotes.some(
+  const upvoteCount = post?.upvoteCount ? post.upvoteCount : 0;
+  const isUpvoted = post?.upvotes.some(
     (upvote) => upvote.userId === currentUserId && upvote.isActive,
   );
 
@@ -55,7 +51,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
           <div className="mr-2 flex-shrink-0">
             <UpvoteButton
               isUpvoted={isUpvoted}
-              postId={postData?.id}
+              postId={post?.id}
               upvoteCount={upvoteCount}
             />
           </div>
@@ -69,22 +65,22 @@ export const PostsCard: React.FC<PostsCardProps> = ({
                 <span>•</span>
                 <span>{upvoteCount} votes</span>
                 <span>•</span>
-                <span>{postData?.replies?.length ?? 0} replies</span>
+                <span>{post.replies?.length ?? 0} replies</span>
               </div>
               <div className="mt-1 flex items-center gap-1 md:mt-0">
                 <span className="md:inline">•</span>
                 <span
                   className={`${
-                    postData?.status === "PLANNED"
+                    post.status === "PLANNED"
                       ? "text-yellow-700"
-                      : postData?.status === "IN_PROGRESS"
+                      : post.status === "IN_PROGRESS"
                         ? "text-blue-700"
-                        : postData?.status === "COMPLETED"
+                        : post.status === "COMPLETED"
                           ? "text-green-700"
                           : ""
                   } rounded-md p-1`}
                 >
-                  {formatPostStatus(postData?.status as string)}
+                  {formatPostStatus(post.status as string)}
                 </span>
                 <span>•</span>
                 <span>
@@ -97,12 +93,9 @@ export const PostsCard: React.FC<PostsCardProps> = ({
           </div>
           <div className="ml-2 flex-shrink-0">
             <Options
-              currentStatus={postData.status as string}
               currentUserId={currentUserId}
               hasAccess={true}
-              postAuthorId={postData.userId}
-              postData={postData}
-              postId={postData.id}
+              post={post}
             />
           </div>
         </div>
@@ -165,12 +158,9 @@ export const PostsCard: React.FC<PostsCardProps> = ({
               {formatPostStatus(post.status as string)}
             </Badge>
             <Options
-              currentStatus={postData.status as string}
               currentUserId={currentUserId}
               hasAccess={true}
-              postAuthorId={postData.userId}
-              postData={postData}
-              postId={postData.id}
+              post={post}
             />
           </div>
         </div>

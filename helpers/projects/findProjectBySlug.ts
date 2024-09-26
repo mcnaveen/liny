@@ -1,6 +1,10 @@
+import { Project } from "@prisma/client";
+
 import { db } from "@/lib/db";
 
-export const findProjectBySlug = async (slug: string) => {
+export const findProjectBySlug = async (
+  slug: string,
+): Promise<Project | null> => {
   try {
     const project = await db.project.findUnique({
       where: {
@@ -11,15 +15,15 @@ export const findProjectBySlug = async (slug: string) => {
         name: true,
         slug: true,
         isPrivate: true,
+        description: true,
+        createdAt: true,
+        updatedAt: true,
+        userId: true,
       },
     });
 
-    if (!project) {
-      return null;
-    }
-
     return project;
   } catch (error) {
-    return error;
+    return null;
   }
 };
