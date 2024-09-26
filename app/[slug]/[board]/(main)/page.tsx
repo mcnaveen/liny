@@ -6,16 +6,19 @@ import { PostsList } from "@/components/posts/list";
 import { checkUserAccess } from "@/helpers/common/hasAccess";
 
 import NotFound from "./not-found";
+import { Board } from "@/types/board";
+import { Project } from "@/types/project";
 
 export async function generateMetadata({
   params,
 }: {
   params: { board: string; slug: string };
 }) {
-  const board = await findBoardBySlug(params.board);
+  const board = (await findBoardBySlug(params.board)) as
+    | (Board & { project: Project; projectId: string; id: string })
+    | null;
 
   return {
-    // @ts-ignore
     title: board?.name + " - " + board?.project?.name,
   };
 }
@@ -27,15 +30,15 @@ export default async function BoardPage({
   params: { board: string; slug: string };
   searchParams: { view?: string };
 }) {
-  const board = await findBoardBySlug(params.board);
+  const board = (await findBoardBySlug(params.board)) as
+    | (Board & { project: Project; projectId: string; id: string })
+    | null;
   const session = await getServerSession(authOptions);
   const view = searchParams.view || "list";
 
   const hasAccess = await checkUserAccess({
     userId: session?.user.id,
-    // @ts-ignore
     projectId: board?.projectId as string,
-    // @ts-ignore
     boardId: board?.id,
   });
 

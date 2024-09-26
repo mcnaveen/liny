@@ -71,7 +71,9 @@ export const UpvoteButton = ({
         className={`rounded-full ${isUpvoted ? "bg-blue-500 text-white" : ""}`}
         size="icon"
         variant="outline"
-        onClick={session ? handleUpvote : handleLoginDialog}
+        onClick={
+          session.status === "authenticated" ? handleUpvote : handleLoginDialog
+        }
       >
         <ChevronUp className="h-4 w-4" />
       </Button>

@@ -19,6 +19,9 @@ interface RecentItem {
     name: string;
     image: string | null;
   };
+  board: {
+    name: string;
+  };
 }
 
 const ShimmerItem = () => (
@@ -62,7 +65,7 @@ export const Recent = ({ projectId }: { projectId: string }) => {
             .fill(0)
             .map((_, index) => <ShimmerItem key={index} />)
         ) : recentItems && recentItems.length > 0 ? (
-          recentItems.map((item, index) => (
+          recentItems.map((item: RecentItem, index) => (
             <div
               key={item.id}
               className={`flex items-center justify-between px-4 py-4 ${
@@ -88,9 +91,7 @@ export const Recent = ({ projectId }: { projectId: string }) => {
                   </h3>
                   <div className="flex items-center space-x-2 text-xs text-muted-foreground">
                     <span>
-                      {/* @ts-ignore */}
                       {item?.board?.name.substring(0, 10)}
-                      {/* @ts-ignore */}
                       {item?.board?.name.length > 10 ? "..." : ""}
                     </span>
                     <span>•</span>

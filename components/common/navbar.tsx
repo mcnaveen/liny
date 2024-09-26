@@ -39,7 +39,7 @@ export const Navbar = () => {
               {session?.user.isInstanceAdmin && <ProjectSwitcher />}
             </div>
             <div className="ml-10 hidden sm:block">
-              {/* Add your navigation items here if needed */}
+              {/* Can be used for mobile */}
             </div>
           </div>
           <div className="flex items-center">

@@ -14,6 +14,8 @@ import { BoardOptions } from "@/components/boards/options";
 import PrivateBoard from "../../private";
 
 import NotFound from "./not-found";
+import { Board } from "@/types/board";
+import { Project } from "@/types/project";
 
 export default async function BoardLayout({
   children,
@@ -22,7 +24,9 @@ export default async function BoardLayout({
   children: React.ReactNode;
   params: { board: string; slug: string };
 }) {
-  const board = await findBoardBySlug(params.board);
+  const board = (await findBoardBySlug(params.board)) as
+    | (Board & { projectId: string })
+    | null;
   const session = await getServerSession(authOptions);
 
   if (!board) {
@@ -56,14 +60,14 @@ export default async function BoardLayout({
               placeholder="Search Posts (Coming Soon)"
             />
             <BoardView />
-            {session && (
+            <BoardOptions />
+            {session ? (
               <CreatePost
                 boardId={board.id as string}
                 projectId={board.projectId as string}
                 text="New Post"
               />
-            )}
-            <BoardOptions />
+            ) : null}
           </div>
         </div>
         <p className="text-gray-600">{board.description}</p>

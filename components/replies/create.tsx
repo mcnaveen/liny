@@ -16,6 +16,8 @@ import {
 } from "../ui/form";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const replySchema = z.object({
   body: z.string().min(1, { message: "Reply is required" }),
@@ -31,6 +33,10 @@ interface ReplyProps {
 }
 
 export const Reply = ({ postId, parentId, boardId, projectId }: ReplyProps) => {
+  const session = useSession();
+  const router = useRouter();
+  const currentUrl = window.location.href;
+
   const queryClient = useQueryClient();
   const form = useForm<FormData>({
     resolver: zodResolver(replySchema),
@@ -96,27 +102,42 @@ export const Reply = ({ postId, parentId, boardId, projectId }: ReplyProps) => {
                     {...field}
                     className="w-full focus:!ring-0 focus:!ring-offset-0"
                     placeholder="Write a reply..."
+                    disabled={session.status === "unauthenticated"}
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button
-            className="w-fit"
-            disabled={mutation.isPending}
-            size="sm"
-            type="submit"
-          >
-            {mutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                <span>Replying...</span>
-              </>
-            ) : (
-              "Reply"
-            )}
-          </Button>
+          {session.status === "authenticated" ? (
+            <Button
+              className="w-fit"
+              disabled={mutation.isPending}
+              size="sm"
+              type="submit"
+            >
+              {mutation.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span>Replying...</span>
+                </>
+              ) : (
+                "Reply"
+              )}
+            </Button>
+          ) : (
+            <Button
+              className="w-fit"
+              size="sm"
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                router.push(`/login?callbackUrl=${currentUrl}`);
+              }}
+            >
+              Login to Reply
+            </Button>
+          )}
         </form>
       </Form>
     </div>
