@@ -211,7 +211,6 @@ model Upvote {
   userId    String
   boardId   String?
   projectId String?
-  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

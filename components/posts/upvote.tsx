@@ -4,7 +4,8 @@ import { ChevronUp } from "lucide-react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { numify } from "numify";
 
 import { LoginDialogContext } from "@/app/provider";
 
@@ -15,11 +16,15 @@ export const UpvoteButton = ({
   isUpvoted,
   postId,
   upvoteCount,
+  userId,
 }: {
   isUpvoted: boolean;
   postId: string;
   upvoteCount: number;
+  userId: string;
 }) => {
+  const [isActive, setIsActive] = useState(isUpvoted);
+  const [count, setCount] = useState(upvoteCount);
   const queryClient = useQueryClient();
 
   const session = useSession();
@@ -39,14 +44,21 @@ export const UpvoteButton = ({
       return response.json();
     },
     onSuccess: (newData) => {
-      queryClient.setQueryData(["post", postId], (oldData: any) => ({
-        ...oldData,
-        upvoteCount: isUpvoted ? upvoteCount - 1 : upvoteCount + 1,
-        upvotes: oldData.upvotes.map((upvote: any) =>
-          upvote.userId === newData.upvote.userId ? newData.upvote : upvote,
-        ),
-      }));
-      toast.success(isUpvoted ? "Upvote removed!" : "Upvoted!");
+      setIsActive(!isActive);
+      setCount(newData.upvoteCount);
+      queryClient.setQueryData(["post", postId], (oldData: any) => {
+        if (!oldData) return oldData;
+
+        return {
+          ...oldData,
+          upvoteCount: newData.upvoteCount,
+          upvotes: isActive
+            ? oldData.upvotes.filter((upvote: any) => upvote.userId !== userId)
+            : [...(oldData.upvotes || []), { userId, postId }],
+        };
+      });
+      queryClient.invalidateQueries({ queryKey: ["post", postId] });
+      toast.success(newData.message);
     },
     onError: (err) => {
       toast.error(err.message);
@@ -68,14 +80,23 @@ export const UpvoteButton = ({
   return (
     <>
       <Button
-        className={`rounded-full ${isUpvoted ? "bg-blue-500 text-white" : ""}`}
+        className={`h-12 w-12 rounded-xl ${isActive ? "border-blue-200 bg-blue-100" : ""}`}
         size="icon"
-        variant="outline"
+        variant={"outline"}
         onClick={
           session.status === "authenticated" ? handleUpvote : handleLoginDialog
         }
       >
-        <ChevronUp className="h-4 w-4" />
+        <span className="flex flex-col items-center">
+          <ChevronUp
+            className={`h-4 w-4 ${isActive ? "font-bold text-blue-500" : ""}`}
+          />
+          <span
+            className={`text-xs ${isActive ? "font-bold text-blue-500" : ""}`}
+          >
+            {count ? numify(count) : null}
+          </span>
+        </span>
       </Button>
       <LoginDialog open={showLoginDialog} onOpenChange={setShowLoginDialog} />
     </>
