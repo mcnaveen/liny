@@ -6,6 +6,8 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -16,8 +18,6 @@ import {
 } from "../ui/form";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 const replySchema = z.object({
   body: z.string().min(1, { message: "Reply is required" }),
@@ -101,8 +101,8 @@ export const Reply = ({ postId, parentId, boardId, projectId }: ReplyProps) => {
                   <Textarea
                     {...field}
                     className="w-full focus:!ring-0 focus:!ring-offset-0"
-                    placeholder="Write a reply..."
                     disabled={session.status === "unauthenticated"}
+                    placeholder="Write a reply..."
                   />
                 </FormControl>
                 <FormMessage />

@@ -12,10 +12,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { formatPostStatus } from "@/helpers/common/formatPostStatus";
+import { Upvote } from "@/types/upvote";
 
 import { UpvoteButton } from "./upvote";
 import Options from "./options";
-import { Upvote } from "@/types/upvote";
 
 interface PostsCardProps {
   post: Post & {
