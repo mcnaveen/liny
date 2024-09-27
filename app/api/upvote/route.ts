@@ -22,31 +22,45 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     });
 
-    let upvote;
-
     if (existingUpvote) {
-      upvote = await db.upvote.update({
+      await db.upvote.delete({
         where: {
           postId_userId: {
             postId: postId,
             userId: user.id,
           },
         },
-        data: {
-          isActive: !existingUpvote.isActive,
+      });
+
+      const upvoteCount = await db.upvote.count({
+        where: {
+          postId: postId,
+          isActive: true,
         },
       });
+
+      return NextResponse.json({ message: "Upvote removed", upvoteCount });
     } else {
-      upvote = await db.upvote.create({
+      await db.upvote.create({
         data: {
           postId: postId,
           userId: user.id,
           isActive: true,
         },
       });
-    }
 
-    return NextResponse.json({ message: "Upvote toggled", upvote });
+      const upvoteCount = await db.upvote.count({
+        where: {
+          postId: postId,
+          isActive: true,
+        },
+      });
+
+      return NextResponse.json({
+        message: "Upvote added",
+        upvoteCount,
+      });
+    }
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ message: error.message }, { status: 403 });

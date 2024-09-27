@@ -4,10 +4,10 @@ import { findBoardBySlug } from "@/helpers/boards/findBoardBySlug";
 import { authOptions } from "@/lib/auth";
 import { PostsList } from "@/components/posts/list";
 import { checkUserAccess } from "@/helpers/common/hasAccess";
-
-import NotFound from "./not-found";
 import { Board } from "@/types/board";
 import { Project } from "@/types/project";
+
+import NotFound from "./not-found";
 
 export async function generateMetadata({
   params,

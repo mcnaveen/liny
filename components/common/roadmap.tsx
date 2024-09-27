@@ -3,7 +3,6 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-
 import { UpvoteButton } from "@/components/posts/upvote";
 
 export const Roadmap = async ({ projectId }: { projectId: string }) => {

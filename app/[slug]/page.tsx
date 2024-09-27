@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth";
-import { Suspense } from "react";
 import { Project } from "@prisma/client";
 
 import { findProjectBySlug } from "@/helpers/projects/findProjectBySlug";
@@ -7,7 +6,6 @@ import { BoardsList } from "@/components/boards/list";
 import { authOptions } from "@/lib/auth";
 import { CreateBoard } from "@/components/boards/create";
 import { ProjectOptions } from "@/components/projects/options";
-import Spinner from "@/components/common/spinner";
 import { checkUserAccess } from "@/helpers/common/hasAccess";
 import { BoardView } from "@/components/boards/view";
 import { Recent } from "@/components/common/recent";

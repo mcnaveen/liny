@@ -12,10 +12,10 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { formatPostStatus } from "@/helpers/common/formatPostStatus";
+import { Upvote } from "@/types/upvote";
 
 import { UpvoteButton } from "./upvote";
 import Options from "./options";
-import { Upvote } from "@/types/upvote";
 
 interface PostsCardProps {
   post: Post & {
@@ -53,6 +53,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
               isUpvoted={isUpvoted}
               postId={post?.id}
               upvoteCount={upvoteCount}
+              userId={currentUserId}
             />
           </div>
           <div className="min-w-0 flex-grow">
@@ -130,6 +131,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
               isUpvoted={isUpvoted}
               postId={post.id}
               upvoteCount={upvoteCount}
+              userId={currentUserId}
             />
             <Avatar className="h-6 w-6">
               <AvatarImage
