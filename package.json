@@ -6,7 +6,7 @@
     "commit": "gacp",
     "dev": "next dev --turbo",
     "build": "next build",
-    "start": "PORT=56928 next start",
+    "start": "next start",
     "lint": "eslint . --ext .ts,.tsx --fix -c .eslintrc.json",
     "postinstall": "npx prisma generate",
     "format": "prettier --write .",

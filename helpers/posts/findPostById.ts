@@ -12,9 +12,6 @@ export const findPostById = async (id: string) => {
         },
       },
       upvotes: {
-        where: {
-          isActive: true,
-        },
         include: {
           user: {
             select: {

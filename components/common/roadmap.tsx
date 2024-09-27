@@ -75,6 +75,7 @@ export const Roadmap = async ({ projectId }: { projectId: string }) => {
                       isUpvoted={post.isUpvoted}
                       postId={post.id}
                       upvoteCount={post.upvotes.length}
+                      userId={post.userId}
                     />
                     <div className="flex flex-col">
                       <CardTitle className="ml-2 font-sans text-sm font-medium">

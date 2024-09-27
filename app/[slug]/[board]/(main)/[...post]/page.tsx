@@ -39,8 +39,8 @@ export default async function PostPage({
     return <div>Post not found</div>;
   }
 
-  const isUpvoted = post.upvotes.some(
-    (upvote) => upvote.user.id === session?.user?.id && upvote.isActive,
+  const isUpvoted = post?.upvotes.some(
+    (upvote) => upvote.user.id === session?.user?.id,
   );
 
   return (
@@ -55,7 +55,8 @@ export default async function PostPage({
         <UpvoteButton
           isUpvoted={isUpvoted}
           postId={post.id}
-          upvoteCount={post._count.upvotes}
+          upvoteCount={post?._count.upvotes}
+          userId={session?.user?.id as string}
         />
         <div className="ml-0 mt-4 sm:ml-4 sm:mt-0">
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 sm:text-2xl">

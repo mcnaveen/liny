@@ -19,11 +19,7 @@ export async function GET(
       user: true,
       project: true,
       board: true,
-      upvotes: {
-        where: {
-          isActive: true,
-        },
-      },
+      upvotes: true,
       replies: true,
     },
   });

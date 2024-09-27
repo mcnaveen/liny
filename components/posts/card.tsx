@@ -41,7 +41,7 @@ export const PostsCard: React.FC<PostsCardProps> = ({
 }) => {
   const upvoteCount = post?.upvoteCount ? post.upvoteCount : 0;
   const isUpvoted = post?.upvotes.some(
-    (upvote) => upvote.userId === currentUserId && upvote.isActive,
+    (upvote) => upvote.userId === currentUserId,
   );
 
   const ListLayout = () => (

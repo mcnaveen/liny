@@ -35,7 +35,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       const upvoteCount = await db.upvote.count({
         where: {
           postId: postId,
-          isActive: true,
         },
       });
 
@@ -45,14 +44,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         data: {
           postId: postId,
           userId: user.id,
-          isActive: true,
         },
       });
 
       const upvoteCount = await db.upvote.count({
         where: {
           postId: postId,
-          isActive: true,
         },
       });
 

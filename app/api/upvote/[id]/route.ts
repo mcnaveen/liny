@@ -27,12 +27,11 @@ export async function GET(
   const upvoteCount = await db.upvote.count({
     where: {
       postId: id,
-      isActive: true,
     },
   });
 
   return NextResponse.json({
-    isUpvoted: upvote?.isActive ?? false,
+    isUpvoted: upvote ? true : false,
     count: upvoteCount,
   });
 }
