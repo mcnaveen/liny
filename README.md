@@ -25,7 +25,7 @@ To get started with Liny, please follow the instructions in the [Installation Gu
 
 ## Contributing
 
-We welcome contributions from the community! Please read the [Contribution Guidelines](https://github.com/mcnaveen/liny/blob/dev/CONTRIBUTING.md) to get started.
+We welcome contributions from the community! Please read the [Contribution Guidelines](https://github.com/mcnaveen/liny/blob/dev/docs/CONTRIBUTING.md) to get started.
 
 ## Community
 
