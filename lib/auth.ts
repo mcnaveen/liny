@@ -10,6 +10,7 @@ import GitHubProvider from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { JWT } from "next-auth/jwt";
+import { Provider } from "next-auth/providers/index";
 
 import { db } from "@/lib/db";
 
@@ -24,28 +25,13 @@ interface NextAuthUserWithStringId extends NextAuthUser {
   id: string;
 }
 
-export const authOptions: NextAuthOptions = {
-  session: {
-    strategy: "jwt",
-    maxAge: 60 * 60,
-  },
-  jwt: {
-    maxAge: 60 * 60,
-  },
-  secret: process.env.NEXTAUTH_SECRET,
-  adapter: PrismaAdapter(db) as any,
-  providers: [
-    EmailProvider({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
-        },
-      },
-      from: process.env.EMAIL_FROM,
-    }),
+const providers: Provider[] = [];
+
+/**
+ * If the GitHub environment variables are set, load the GitHub provider by pushing it to the providers array
+ */
+if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) {
+  providers.push(
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
@@ -59,13 +45,59 @@ export const authOptions: NextAuthOptions = {
         } as NextAuthUserWithStringId;
       },
     }),
+  );
+}
+
+/**
+ * If the Google environment variables are set, load the Google provider by pushing it to the providers array
+ */
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) {
+  providers.push(
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       checks: ["none"],
       allowDangerousEmailAccountLinking: true,
     }),
-  ],
+  );
+}
+
+/**
+ * If the Email environment variables are set, load the Email provider by pushing it to the providers array
+ */
+if (
+  process.env.EMAIL_SERVER_HOST &&
+  process.env.EMAIL_SERVER_PORT &&
+  process.env.EMAIL_SERVER_USER &&
+  process.env.EMAIL_SERVER_PASSWORD &&
+  process.env.EMAIL_FROM
+) {
+  providers.push(
+    EmailProvider({
+      server: {
+        host: process.env.EMAIL_SERVER_HOST as string,
+        port: parseInt(process.env.EMAIL_SERVER_PORT as string),
+        auth: {
+          user: process.env.EMAIL_SERVER_USER as string,
+          pass: process.env.EMAIL_SERVER_PASSWORD as string,
+        },
+      },
+      from: process.env.EMAIL_FROM as string,
+    }),
+  );
+}
+
+export const authOptions: NextAuthOptions = {
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 60,
+  },
+  jwt: {
+    maxAge: 60 * 60,
+  },
+  secret: process.env.NEXTAUTH_SECRET,
+  adapter: PrismaAdapter(db) as any,
+  providers: providers,
   callbacks: {
     async jwt({ token, user, account }) {
       if (user) {
