@@ -17,7 +17,7 @@ Follow these steps to set up and run the Liny project:
 
    Open the `.env` file and fill in the required fields. You can leave the SMTP fields empty if not needed.
 
-3. If you're self-hosting, set `SELFHOSTED` to `true` in the `.env` file to block other users from creating projects.
+3. If you're self-hosting, set `SELFHOSTED` to `true` in the `.env` file to block other users from creating projects in your instance. (Default is `true`)
 
 4. Install dependencies using your preferred package manager. For pnpm:
 
@@ -29,9 +29,11 @@ Follow these steps to set up and run the Liny project:
 
 5. Set up the database:
 
-   ```bash
-   npx prisma db push
-   ```
+> If you're using Supabase, Please refer to the [Supabase Setup Guide](./use-supabase.md) and come back.
+
+```bash
+npx prisma db push
+```
 
 6. Build the project:
 
