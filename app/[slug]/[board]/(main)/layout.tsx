@@ -59,7 +59,7 @@ export default async function BoardLayout({
               placeholder="Search Posts (Coming Soon)"
             />
             <BoardView />
-            <BoardOptions />
+            {hasAccess && <BoardOptions />}
             {session ? (
               <CreatePost
                 boardId={board.id as string}
