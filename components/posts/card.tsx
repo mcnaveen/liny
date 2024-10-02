@@ -32,6 +32,7 @@ interface PostsCardProps {
   layout: "compact" | "list" | "grid";
   user: User;
   currentUserId: string;
+  hasAccess: boolean;
 }
 
 export const PostsCard: React.FC<PostsCardProps> = ({
