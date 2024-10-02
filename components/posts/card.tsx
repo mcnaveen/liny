@@ -32,12 +32,14 @@ interface PostsCardProps {
   layout: "compact" | "list" | "grid";
   user: User;
   currentUserId: string;
+  hasAccess: boolean;
 }
 
 export const PostsCard: React.FC<PostsCardProps> = ({
   post,
   layout = "compact",
   currentUserId,
+  hasAccess,
 }) => {
   const upvoteCount = post?.upvoteCount ? post.upvoteCount : 0;
   const isUpvoted = post?.upvotes.some(
@@ -93,11 +95,13 @@ export const PostsCard: React.FC<PostsCardProps> = ({
             </div>
           </div>
           <div className="ml-2 flex-shrink-0">
-            <Options
-              currentUserId={currentUserId}
-              hasAccess={true}
-              post={post}
-            />
+            {hasAccess && (
+              <Options
+                currentUserId={currentUserId}
+                hasAccess={true}
+                post={post}
+              />
+            )}
           </div>
         </div>
       </CardHeader>
@@ -159,11 +163,13 @@ export const PostsCard: React.FC<PostsCardProps> = ({
             >
               {formatPostStatus(post.status as string)}
             </Badge>
-            <Options
-              currentUserId={currentUserId}
-              hasAccess={true}
-              post={post}
-            />
+            {hasAccess && (
+              <Options
+                currentUserId={currentUserId}
+                hasAccess={true}
+                post={post}
+              />
+            )}
           </div>
         </div>
       </CardFooter>
