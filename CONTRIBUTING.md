@@ -18,6 +18,8 @@ There are several ways you can contribute to the Liny project:
    - Create a new branch for your changes
    - Submit a pull request for your changes
 
+   > Detailed steps are available in the [Development Guide](./docs/development.md).
+
 4. **Improving Documentation**: You can help improve the project's documentation by correcting errors, adding new content, or enhancing existing documentation.
 
 5. **Providing Feedback or Suggestions**: You can share your feedback, ideas, or suggestions for the project by participating in the [Discord server](https://discord.gg/Wz2B3wQZCZ).
