@@ -9,6 +9,7 @@ import { authOptions } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Reply } from "@/components/replies/create";
 import { RepliesList } from "@/components/replies/list";
+import { LinkRenderer } from "@/components/common/link-renderer";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -62,8 +63,18 @@ export default async function PostPage({
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 sm:text-2xl">
             {post.title}
           </h2>
-          <p className="mt-1 text-sm text-gray-600 dark:text-gray-300">
-            {post.description}
+          <p className="mt-1 flex flex-wrap text-sm text-gray-600 dark:text-gray-300">
+            {post?.description
+              ?.split(/(https?:\/\/[^\s]+)/g)
+              .map((part, index) =>
+                part.match(/https?:\/\/[^\s]+/) ? (
+                  <LinkRenderer key={index} href={part}>
+                    {part}
+                  </LinkRenderer>
+                ) : (
+                  part
+                ),
+              )}
           </p>
           <p className="mt-1 text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
             {formatDistance(post.createdAt, new Date(), {
