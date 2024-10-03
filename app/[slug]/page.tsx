@@ -16,7 +16,6 @@ import { BoardFilter } from "@/components/boards/filter";
 import NotFound from "./not-found";
 import PrivateBoard from "./private";
 
-// meta data
 export async function generateMetadata({
   params,
 }: {
