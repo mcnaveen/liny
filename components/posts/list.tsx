@@ -111,10 +111,10 @@ export function PostsList({
                   currentUserId={currentUserId}
                   hasAccess={hasAccess}
                   layout={view}
-                  // @ts-ignore
+                  // @ts-expect-error: will improve ts later
                   post={post}
                   postType={post.postType}
-                  // @ts-ignore
+                  // @ts-expect-error: will improve ts later
                   user={post.user!}
                 />
               </Link>

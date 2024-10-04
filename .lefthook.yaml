@@ -1,0 +1,7 @@
+---
+pre-commit:
+  parallel: true
+  commands:
+    eslint:
+      glob: "*.{js,ts,mjs,cjs,jsx,tsx}"
+      run: npx eslint {staged_files} --ext .js,.ts,.tsx,.jsx
