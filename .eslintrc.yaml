@@ -36,21 +36,6 @@ rules:
   no-unused-vars: off
   unused-imports/no-unused-vars: off
   unused-imports/no-unused-imports: warn
-  '@stylistic/indent':
-    - 'error'
-    - 2
-  '@stylistic/quotes':
-    - 'error'
-    - 'single'
-  '@stylistic/object-curly-spacing':
-    - 'error'
-    - 'always'
-  '@stylistic/jsx-tag-spacing':
-    - 'error'
-    - beforeSelfClosing: always
-      closingSlash: never
-      afterOpening: never
-      beforeClosing: never
   '@typescript-eslint/no-unused-vars':
     - warn
     - args: after-used
