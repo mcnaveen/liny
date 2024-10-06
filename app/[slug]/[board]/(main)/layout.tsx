@@ -1,3 +1,4 @@
+import React from "react";
 import { getServerSession } from "next-auth";
 
 import { authOptions } from "@/lib/auth";
@@ -11,6 +12,7 @@ import { CreatePost } from "@/components/posts/create";
 import { Input } from "@/components/ui/input";
 import { BoardOptions } from "@/components/boards/options";
 import { Board } from "@/types/board";
+import Search from "./search";
 
 import PrivateBoard from "../../private";
 
@@ -53,13 +55,9 @@ export default async function BoardLayout({
             </Badge>
           </div>
           <div className="flex flex-col items-start space-y-2 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
-            <Input
-              disabled
-              className="w-full sm:w-auto"
-              placeholder="Search Posts (Coming Soon)"
-            />
+            <Search />
             <BoardView />
-            <BoardOptions />
+            {hasAccess && <BoardOptions />}
             {session ? (
               <CreatePost
                 boardId={board.id as string}
