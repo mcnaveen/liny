@@ -80,23 +80,24 @@ export const UpvoteButton = ({
   return (
     <>
       <Button
-        className={`h-12 w-12 rounded-xl ${isActive ? "border-blue-200 bg-blue-100" : ""}`}
+        className={`h-12 w-10 flex-col rounded-xl ${isActive ? "border-blue-200 bg-blue-100" : ""}`}
         size="icon"
         variant={"outline"}
         onClick={
           session.status === "authenticated" ? handleUpvote : handleLoginDialog
         }
       >
-        <span className="flex flex-col items-center">
-          <ChevronUp
-            className={`h-4 w-4 ${isActive ? "font-bold text-blue-500" : ""}`}
-          />
+        <ChevronUp
+          className={isActive ? "font-bold text-blue-500" : ""}
+          size={16}
+        />
+        {count && (
           <span
             className={`text-xs ${isActive ? "font-bold text-blue-500" : ""}`}
           >
-            {count ? numify(count) : null}
+            {numify(count)}
           </span>
-        </span>
+        )}
       </Button>
       <LoginDialog open={showLoginDialog} onOpenChange={setShowLoginDialog} />
     </>

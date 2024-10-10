@@ -43,21 +43,20 @@ export const PostsCard: React.FC<PostsCardProps> = ({
 }) => {
   const upvoteCount = post?.upvoteCount ? post.upvoteCount : 0;
   const isUpvoted = post?.upvotes.some(
-    (upvote) => upvote.userId === currentUserId,
+    (upvote) => upvote.userId === currentUserId
   );
 
   const ListLayout = () => (
     <Card className="data-[hover-state-enabled=true]:hover:drop-shadow-card-hover mb-2 w-full rounded-xl border border-gray-200 bg-white transition-[filter] dark:border-gray-800 dark:bg-black">
       <CardHeader className="flex flex-row items-center gap-3 p-3">
-        <div className="flex w-full items-center justify-start">
-          <div className="mr-2 flex-shrink-0">
-            <UpvoteButton
-              isUpvoted={isUpvoted}
-              postId={post?.id}
-              upvoteCount={upvoteCount}
-              userId={currentUserId}
-            />
-          </div>
+        <div className="flex w-full items-center justify-start gap-4">
+          <UpvoteButton
+            isUpvoted={isUpvoted}
+            postId={post?.id}
+            upvoteCount={upvoteCount}
+            userId={currentUserId}
+          />
+
           <div className="min-w-0 flex-grow">
             <CardTitle className="flex items-center gap-2 truncate text-base">
               {post.title}
@@ -94,7 +93,8 @@ export const PostsCard: React.FC<PostsCardProps> = ({
               </div>
             </div>
           </div>
-          <div className="ml-2 flex-shrink-0">
+
+          <div className="flex-shrink-0">
             {hasAccess && (
               <Options
                 currentUserId={currentUserId}
