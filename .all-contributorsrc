@@ -1,5 +1,7 @@
 {
-  "files": ["README.md"],
+  "files": [
+    "README.md"
+  ],
   "imageSize": 50,
   "commit": false,
   "contributors": [
@@ -8,7 +10,20 @@
       "name": "Naveen MC",
       "avatar_url": "https://avatars.githubusercontent.com/u/8493007?v=4",
       "profile": "https://github.com/mcnaveen",
-      "contributions": ["code", "ideas"]
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
+    {
+      "login": "jagadhis",
+      "name": "jagadhis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56719874?v=4",
+      "profile": "https://devjags-portfolio.vercel.app/",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -17,5 +32,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "skipCi": true,
-  "commitConvention": "none"
+  "commitConvention": "none",
+  "commitType": "docs"
 }
