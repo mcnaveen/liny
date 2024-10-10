@@ -24,7 +24,17 @@
         "code",
         "ideas"
       ]
-    }
+    },
+    {
+      "login": "jagadhis",
+      "name": "jagadhis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/56719874?v=4",
+      "profile": "https://devjags-portfolio.vercel.app/",
+      "contributions": [
+        "code",
+        "ideas"
+      ]
+    },
   ],
   "contributorsPerLine": 7,
   "projectName": "liny",
