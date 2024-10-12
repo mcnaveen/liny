@@ -28,7 +28,6 @@ export default async function BoardPage({
   searchParams,
 }: {
   params: { board: string; slug: string };
-  searchParams: { view?: string; search: string };
 }) {
   const board = (await findBoardBySlug(params.board)) as
     | (Board & { project: Project; projectId: string; id: string })
@@ -48,7 +47,6 @@ export default async function BoardPage({
   return (
     <PostsList
       boardId={board.id}
-      searchKeyword={searchParams.search}
       cols={2}
       currentUserId={session?.user?.id as string}
       hasAccess={hasAccess}

@@ -12,7 +12,7 @@ import { CreatePost } from "@/components/posts/create";
 import { Input } from "@/components/ui/input";
 import { BoardOptions } from "@/components/boards/options";
 import { Board } from "@/types/board";
-import Search from "./search";
+import Search from "../../search";
 
 import PrivateBoard from "../../private";
 
@@ -55,7 +55,10 @@ export default async function BoardLayout({
             </Badge>
           </div>
           <div className="flex flex-col items-start space-y-2 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
-            <Search />
+            <Search
+              paramName="search-post"
+              placeHolderValue="Search Posts..."
+            />
             <BoardView />
             {hasAccess && <BoardOptions />}
             {session ? (

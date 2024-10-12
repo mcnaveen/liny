@@ -93,6 +93,7 @@ export const CreateBoardForm = ({
     onSuccess: () => {
       toast.success("Board created successfully");
       queryClient.invalidateQueries({ queryKey: ["boards"] });
+      form.reset();
       setOpen(false);
     },
     onError: (error) => {

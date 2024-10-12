@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BoardPostType, PostStatus } from "@prisma/client";
 import { JsonValue } from "@prisma/client/runtime/library";
@@ -55,9 +56,10 @@ export function PostsList({
   currentUserId,
   cols = 2,
   hasAccess,
-  searchKeyword,
 }: PostsListProps) {
   const [isSearching, setIsSearching] = useState(false);
+  const searchParams = useSearchParams();
+  const searchKeyword = searchParams.get("search-post") || "";
   const { data, isLoading } = useQuery<{ posts: Post[] }>({
     queryKey: ["posts", boardId],
     queryFn: async () => {
