@@ -41,7 +41,7 @@ export default async function PostPage({
   }
 
   const isUpvoted = post?.upvotes.some(
-    (upvote) => upvote.user.id === session?.user?.id,
+    (upvote) => upvote.user.id === session?.user?.id
   );
 
   return (
@@ -52,18 +52,20 @@ export default async function PostPage({
           Back
         </Button>
       </Link>
-      <header className="flex flex-col items-start rounded-t-lg border-b border-gray-200 bg-gray-100 px-4 py-4 pb-8 dark:border-gray-700 dark:bg-[#0A0A0A] dark:text-gray-200 sm:flex-row sm:items-center sm:px-6">
-        <UpvoteButton
-          isUpvoted={isUpvoted}
-          postId={post.id}
-          upvoteCount={post?._count.upvotes}
-          userId={session?.user?.id as string}
-        />
-        <div className="ml-0 mt-4 sm:ml-4 sm:mt-0">
+      <header className="flex gap-4 rounded-t-lg border-b border-gray-200 bg-gray-100 px-4 py-4 pb-8 dark:border-gray-700 dark:bg-[#0A0A0A] dark:text-gray-200 sm:flex-row sm:items-center sm:px-6">
+        <div className="flex-shrink-0">
+          <UpvoteButton
+            isUpvoted={isUpvoted}
+            postId={post.id}
+            upvoteCount={post?._count.upvotes}
+            userId={session?.user?.id as string}
+          />
+        </div>
+        <div className="flex-grow min-w-0 mt-4 sm:mt-0">
           <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 sm:text-2xl">
             {post.title}
           </h2>
-          <p className="mt-1 flex flex-wrap text-sm text-gray-600 dark:text-gray-300">
+          <p className="mt-1 break-words whitespace-pre-wrap text-sm text-gray-600 dark:text-gray-300">
             {post?.description
               ?.split(/(https?:\/\/[^\s]+)/g)
               .map((part, index) =>
@@ -73,7 +75,7 @@ export default async function PostPage({
                   </LinkRenderer>
                 ) : (
                   part
-                ),
+                )
               )}
           </p>
           <p className="mt-1 text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
