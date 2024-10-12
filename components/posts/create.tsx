@@ -81,6 +81,7 @@ export const CreatePostSheet = ({
     onSuccess: () => {
       toast.success("Feature Request Added");
       queryClient.invalidateQueries({ queryKey: ["posts", boardId] });
+      form.reset();
       setOpen(false);
     },
     onError: (error) => {

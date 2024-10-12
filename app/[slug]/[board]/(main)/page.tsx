@@ -35,7 +35,6 @@ export default async function BoardPage({
     | null;
   const session = await getServerSession(authOptions);
   const view = searchParams.view || "list";
-
   const hasAccess = await checkUserAccess({
     userId: session?.user.id,
     projectId: board?.projectId as string,

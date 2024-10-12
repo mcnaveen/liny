@@ -1,11 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { BoardPostType, PostStatus } from "@prisma/client";
 import { JsonValue } from "@prisma/client/runtime/library";
 import { motion } from "framer-motion";
+import Fuse from "fuse.js";
 
 import Spinner from "@/components/common/spinner";
 
@@ -54,6 +56,9 @@ export function PostsList({
   cols = 2,
   hasAccess,
 }: PostsListProps) {
+  const [isSearching, setIsSearching] = useState(false);
+  const searchParams = useSearchParams();
+  const searchKeyword = searchParams.get("search-post") || "";
   const { data, isLoading } = useQuery<{ posts: Post[] }>({
     queryKey: ["posts", boardId],
     queryFn: async () => {
@@ -67,7 +72,26 @@ export function PostsList({
     },
   });
 
-  if (isLoading) {
+  const posts = data?.posts || [];
+  const [filteredPosts, setFilteredPosts] = useState(posts);
+
+  useEffect(() => {
+    if (searchKeyword) {
+      setIsSearching(true);
+      const fuseOptions = {
+        keys: ["title", "description"],
+      };
+
+      const fuse = new Fuse(posts, fuseOptions);
+      const results = fuse.search(searchKeyword);
+
+      setIsSearching(false);
+      setFilteredPosts(results.map((result) => result.item));
+    } else {
+      setFilteredPosts(posts);
+    }
+  }, [searchKeyword, data]);
+  if (isLoading || isSearching) {
     return (
       <div className="flex h-64 items-center justify-center">
         <Spinner />
@@ -75,10 +99,8 @@ export function PostsList({
     );
   }
 
-  const posts = data?.posts || [];
-
   // Sort posts by createdAt in descending order
-  const sortedPosts = [...posts].sort(
+  const sortedPosts = [...filteredPosts].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 

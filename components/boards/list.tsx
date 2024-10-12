@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Board } from "@prisma/client";
 import Link from "next/link";
@@ -9,6 +9,7 @@ import _ from "lodash";
 import { useSession } from "next-auth/react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion } from "framer-motion";
+import Fuse from "fuse.js";
 
 import { Separator } from "../ui/separator";
 import { Badge } from "../ui/badge";
@@ -33,10 +34,13 @@ export const BoardsList = ({
   limit?: number;
 }) => {
   const [showAllBoards, setShowAllBoards] = useState(showAll);
+  const [boards, setBoards] = useState<Board[]>([]);
+  const [filteredBoards, setFilteredBoards] = useState<Board[]>([]);
   const searchParams = useSearchParams();
   const { data: session } = useSession();
   const sortValue = session ? searchParams.get("sort") || "" : "";
   const visibilityValue = session ? searchParams.get("visibility") || "" : "";
+  const searchKeyword = searchParams.get("search-board") || "";
 
   const { data, isLoading } = useQuery<{ boards: Board[] }>({
     queryKey: ["boards"],
@@ -50,6 +54,41 @@ export const BoardsList = ({
       return response.json();
     },
   });
+
+  useEffect(() => {
+    if (data?.boards) {
+      setBoards(data?.boards);
+    }
+  }, [data?.boards]);
+
+  useEffect(() => {
+    let updatedBoards = [...boards];
+    if (searchKeyword && updatedBoards.length > 0) {
+      const fuseOptions = {
+        keys: ["name", "description"],
+      };
+
+      const fuse = new Fuse(updatedBoards, fuseOptions);
+      const results = fuse.search(searchKeyword);
+      updatedBoards = results.map((result) => result.item);
+    }
+    if (session && updatedBoards.length > 0) {
+      // Apply visibility filters
+      if (visibilityValue === "private") {
+        updatedBoards = updatedBoards.filter((board) => board.isPrivate);
+      } else if (visibilityValue === "public") {
+        updatedBoards = updatedBoards.filter((board) => !board.isPrivate);
+      }
+
+      // Apply sorting
+      if (sortValue === "z-a") {
+        updatedBoards = _.orderBy(updatedBoards, ["name"], ["desc"]);
+      } else if (sortValue === "a-z") {
+        updatedBoards = _.orderBy(updatedBoards, ["name"], ["asc"]);
+      }
+    }
+    setFilteredBoards(updatedBoards);
+  }, [boards, searchKeyword, visibilityValue, sortValue]);
 
   if (isLoading) {
     return (
@@ -65,24 +104,6 @@ export const BoardsList = ({
         ))}
       </div>
     );
-  }
-
-  let filteredBoards = data?.boards || [];
-
-  if (session) {
-    // Apply visibility filters
-    if (visibilityValue === "private") {
-      filteredBoards = filteredBoards.filter((board) => board.isPrivate);
-    } else if (visibilityValue === "public") {
-      filteredBoards = filteredBoards.filter((board) => !board.isPrivate);
-    }
-
-    // Apply sorting
-    if (sortValue === "z-a") {
-      filteredBoards = _.orderBy(filteredBoards, ["name"], ["desc"]);
-    } else if (sortValue === "a-z") {
-      filteredBoards = _.orderBy(filteredBoards, ["name"], ["asc"]);
-    }
   }
 
   const displayedBoards = showAllBoards

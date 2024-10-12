@@ -15,6 +15,7 @@ import { BoardFilter } from "@/components/boards/filter";
 
 import NotFound from "./not-found";
 import PrivateBoard from "./private";
+import Search from "./search";
 
 export async function generateMetadata({
   params,
@@ -30,6 +31,7 @@ export async function generateMetadata({
 
 export default async function ProjectPage({
   params,
+  searchParams,
 }: {
   params: { slug: string };
 }) {
@@ -55,10 +57,9 @@ export default async function ProjectPage({
         <header className="mb-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
           {session && hasAccess && (
             <>
-              <Input
-                disabled
-                className="w-full sm:w-auto"
-                placeholder="Search boards... (Coming Soon)"
+              <Search
+                paramName="search-board"
+                placeHolderValue="Search Boards"
               />
               <section className="flex w-full flex-wrap items-center justify-center gap-2 sm:w-auto sm:justify-end">
                 <BoardFilter />
