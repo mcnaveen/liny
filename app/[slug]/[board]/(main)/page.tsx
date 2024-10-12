@@ -28,6 +28,7 @@ export default async function BoardPage({
   searchParams,
 }: {
   params: { board: string; slug: string };
+  searchParams: { view?: string };
 }) {
   const board = (await findBoardBySlug(params.board)) as
     | (Board & { project: Project; projectId: string; id: string })

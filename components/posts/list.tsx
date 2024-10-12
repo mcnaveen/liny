@@ -19,7 +19,6 @@ interface PostsListProps {
   currentUserId: string;
   cols?: number;
   hasAccess: boolean;
-  searchKeyword: string;
 }
 
 interface Post {
@@ -75,6 +74,7 @@ export function PostsList({
 
   const posts = data?.posts || [];
   const [filteredPosts, setFilteredPosts] = useState(posts);
+
   useEffect(() => {
     if (searchKeyword) {
       setIsSearching(true);
@@ -84,6 +84,7 @@ export function PostsList({
 
       const fuse = new Fuse(posts, fuseOptions);
       const results = fuse.search(searchKeyword);
+
       setIsSearching(false);
       setFilteredPosts(results.map((result) => result.item));
     } else {
