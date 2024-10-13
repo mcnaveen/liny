@@ -60,15 +60,17 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  invites      Invite[]
-  upvotes      Upvote[]
-  projectUsers ProjectUser[]
-  projects     Project[]
-  posts        Post[]
-  replies      Reply[]
-  categories   Category[]
-  boards       Board[]
-  boardUsers   BoardUser[]
+  upvotes         Upvote[]
+  projectUsers    ProjectUser[]
+  projects        Project[]
+  posts           Post[]
+  replies         Reply[]
+  categories      Category[]
+  boards          Board[]
+  boardUsers      BoardUser[]
+  sentInvites     Invite[]      @relation("SentInvites")
+  receivedInvites Invite[]      @relation("ReceivedInvites")
+  Invite          Invite[]
 }
 
 model VerificationToken {
@@ -155,6 +157,7 @@ model Board {
   project    Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   boardUsers BoardUser[]
+  Invite     Invite[]
 
   @@index([projectId])
 }
@@ -262,16 +265,24 @@ model Tag {
 
 model Invite {
   id        String       @id @default(cuid())
-  email     String
-  userId    String
-  projectId String
+  projectId String?
+  boardId   String?
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   expiresAt DateTime
-  status    InviteStatus
+  status    InviteStatus @default(PENDING)
 
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  senderId String
+  sender   User   @relation("SentInvites", fields: [senderId], references: [id])
+
+  recipientId    String?
+  recipient      User?   @relation("ReceivedInvites", fields: [recipientId], references: [id])
+  recipientEmail String
+
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  board   Board?   @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  User    User?    @relation(fields: [userId], references: [id])
+  userId  String?
 }
 
 model Integration {

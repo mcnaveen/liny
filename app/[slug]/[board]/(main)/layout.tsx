@@ -64,7 +64,7 @@ export default async function BoardLayout({
               <CreatePost
                 boardId={board.id as string}
                 projectId={board.projectId as string}
-                text="New Post"
+                text="New"
               />
             ) : null}
           </div>

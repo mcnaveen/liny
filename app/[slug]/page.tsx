@@ -62,7 +62,8 @@ export default async function ProjectPage({
               />
               <section className="flex w-full flex-wrap items-center justify-center gap-2 sm:w-auto sm:justify-end">
                 <BoardFilter />
-                <ProjectOptions />
+                {hasAccess && <BoardView />}
+                <ProjectOptions projectId={project.id} />
                 {session.user.isInstanceAdmin && (
                   <CreateBoard projectId={project.id} />
                 )}
@@ -83,7 +84,6 @@ export default async function ProjectPage({
                 <div>
                   <span className="text-md mb-2 block sm:mb-0">Boards</span>
                 </div>
-                {hasAccess && <BoardView />}
               </div>
               <div className="mt-4">
                 <BoardsList

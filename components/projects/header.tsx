@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Project } from "@/project";
+import { Project } from "@/types/project";
 
 export const ProjectHeader = ({ data }: { data: Project }) => {
   return (

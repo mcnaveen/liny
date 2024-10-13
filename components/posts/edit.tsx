@@ -6,6 +6,15 @@ import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Post, PostStatus } from "@prisma/client";
 
+import { useMediaQuery } from "@/hooks/use-media-query";
+import {
+  Drawer,
+  DrawerHeader,
+  DrawerDescription,
+  DrawerContent,
+  DrawerTitle,
+  DrawerOverlay,
+} from "@/components/ui/drawer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -99,7 +108,7 @@ export const EditPostSheet = ({
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error ? error.message : "Failed to update post",
+        error instanceof Error ? error.message : "Failed to update post"
       );
     },
   });
@@ -110,105 +119,134 @@ export const EditPostSheet = ({
     setLoading(false);
   };
 
+  const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const content = (
+    <Form {...form}>
+      <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Post Title</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Post Title"
+                  {...field}
+                  autoComplete="off"
+                  spellCheck="false"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="description"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Post Description</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Post Description"
+                  {...field}
+                  autoComplete="off"
+                  spellCheck="false"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Status</FormLabel>
+              <Select defaultValue={field.value} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a status" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="PLANNED">Planned</SelectItem>
+                  <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
+                  <SelectItem value="COMPLETED">Completed</SelectItem>
+                  <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button
+          className="my-4 mt-8 w-full"
+          disabled={loading || mutation.status === "pending"}
+          type="submit"
+        >
+          {loading ? "Loading..." : "Update Post"}
+        </Button>
+      </form>
+    </Form>
+  );
+
   return (
-    <Sheet
-      open={open}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          onClose(
-            new MouseEvent("click") as unknown as React.MouseEvent<
-              Element,
-              MouseEvent
-            >,
-          );
-        }
-        setOpen(isOpen);
-      }}
-    >
-      <SheetContent
-        className="m-4 h-[97%] w-[400px] rounded-lg sm:w-[540px]"
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        <SheetHeader>
-          <SheetTitle>Edit Post</SheetTitle>
-        </SheetHeader>
-        <Form {...form}>
-          <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Post Title</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Post Title"
-                      {...field}
-                      autoComplete="off"
-                      spellCheck="false"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Post Description</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Post Description"
-                      {...field}
-                      autoComplete="off"
-                      spellCheck="false"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    defaultValue={field.value}
-                    onValueChange={field.onChange}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="PLANNED">Planned</SelectItem>
-                      <SelectItem value="IN_PROGRESS">In Progress</SelectItem>
-                      <SelectItem value="COMPLETED">Completed</SelectItem>
-                      <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              className="my-4 mt-8 w-full"
-              disabled={loading || mutation.status === "pending"}
-              type="submit"
-            >
-              {loading ? "Loading..." : "Update Post"}
-            </Button>
-          </form>
-        </Form>
-      </SheetContent>
-    </Sheet>
+    <>
+      {isMobile ? (
+        <Drawer
+          open={open}
+          shouldScaleBackground={false}
+          onOpenChange={setOpen}
+        >
+          <DrawerContent
+            className="m-2"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
+            <DrawerHeader>
+              <DrawerTitle>Edit Post</DrawerTitle>
+              <DrawerDescription>
+                Edit the details of this post
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="mb-4 px-4">{content}</div>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <Sheet
+          open={open}
+          onOpenChange={(isOpen) => {
+            if (!isOpen) {
+              onClose(
+                new MouseEvent("click") as unknown as React.MouseEvent<
+                  Element,
+                  MouseEvent
+                >
+              );
+            }
+            setOpen(isOpen);
+          }}
+        >
+          <SheetContent
+            className="m-4 h-[97%] w-[400px] rounded-lg sm:w-[540px]"
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+          >
+            <SheetHeader>
+              <SheetTitle>Edit Post {isMobile ? "" : "Details"}</SheetTitle>
+            </SheetHeader>
+            {content}
+          </SheetContent>
+        </Sheet>
+      )}
+    </>
   );
 };
 

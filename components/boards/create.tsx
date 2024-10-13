@@ -97,7 +97,7 @@ export const CreateBoardForm = ({
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error ? error.message : "Failed to create board",
+        error instanceof Error ? error.message : "Failed to create board"
       );
     },
   });
@@ -111,10 +111,10 @@ export const CreateBoardForm = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <motion.div
-        animate={{ opacity: 1, scale: 1 }} // Animate to this state
-        exit={{ opacity: 0, scale: 0.9 }} // Exit state
-        initial={{ opacity: 0, scale: 0.9 }} // Initial state
-        transition={{ duration: 0.3 }} // Animation duration
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.9 }}
+        initial={{ opacity: 0, scale: 0.9 }}
+        transition={{ duration: 0.3 }}
       >
         <DialogContent>
           <DialogHeader>
@@ -231,7 +231,7 @@ export const CreateBoard = ({ projectId }: { projectId: string }) => {
   return (
     <>
       <Button onClick={() => setOpen(true)}>
-        <PlusIcon className="mr-2" /> Create Board
+        <PlusIcon className="mr-2 h-5 w-5" /> New
       </Button>
       <CreateBoardForm open={open} projectId={projectId} setOpen={setOpen} />
     </>
