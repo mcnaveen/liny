@@ -10,8 +10,8 @@ import { useSession } from "next-auth/react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { motion } from "framer-motion";
 
-import { Separator } from "../ui/separator";
-import { Badge } from "../ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 
 import { BoardsCard } from "./card";
 import { BoardShimmer } from "./shimmer";
@@ -88,8 +88,8 @@ export const BoardsList = ({
   const displayedBoards = showAllBoards
     ? filteredBoards
     : showAllBoards
-      ? filteredBoards
-      : filteredBoards.slice(0, limit);
+    ? filteredBoards
+    : filteredBoards.slice(0, limit);
 
   return (
     <>

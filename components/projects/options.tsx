@@ -6,18 +6,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { toast } from "sonner";
 
+import { useInvite } from "@/hooks/useInvite";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-import { Button } from "../ui/button";
-import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
-import { Input } from "../ui/input";
-import Spinner from "../common/spinner";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import Spinner from "@/components/common/spinner";
+import { Project } from "@prisma/client";
 
 const inviteSchema = z.object({
   email: z.string().email(),
@@ -37,11 +37,10 @@ const transition = {
   damping: 30,
 };
 
-export const ProjectOptions = ({ projectId }: { projectId: string }) => {
+export const ProjectOptions = ({ data }: { data: Project }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteState, setDeleteState] = useState("initial");
   const [showInvite, setShowInvite] = useState(false);
-  const [loading, setLoading] = useState(false); // Added loading state
 
   const handleConfirmClick = () => {
     setDeleteState("deleting");
@@ -58,35 +57,15 @@ export const ProjectOptions = ({ projectId }: { projectId: string }) => {
     resolver: zodResolver(inviteSchema),
   });
 
+  const inviteMutation = useInvite({ projectId: data.id });
+
   const onSubmit = async (data: InviteFormData) => {
-    setLoading(true); // Set loading to true on submit
-    try {
-      const response = await fetch("/api/invite", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ ...data, projectId }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-
-        toast.error(errorData.message || "Failed to send invite");
-
-        return;
-      }
-
-      toast.success("Invite sent successfully");
-      reset();
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to send invite"
-      );
-    } finally {
-      setLoading(false);
-      setShowInvite(false);
-    }
+    inviteMutation.mutate(data, {
+      onSuccess: () => {
+        reset();
+        setShowInvite(false);
+      },
+    });
   };
 
   return (
@@ -191,8 +170,12 @@ export const ProjectOptions = ({ projectId }: { projectId: string }) => {
               {...register("email")}
               className="input"
             />
-            <Button className="w-full mt-2" disabled={loading} type="submit">
-              {loading ? <Spinner className="animate-spin" /> : "Send Invite"}
+            <Button className="w-full mt-2" type="submit">
+              {inviteMutation.isPending ? (
+                <Spinner className="animate-spin" />
+              ) : (
+                "Send Invite"
+              )}
             </Button>
           </form>
         </DialogContent>

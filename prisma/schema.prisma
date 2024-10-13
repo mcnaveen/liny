@@ -271,9 +271,9 @@ model Invite {
   updatedAt DateTime     @updatedAt
   expiresAt DateTime
   status    InviteStatus @default(PENDING)
-
-  senderId String
-  sender   User   @relation("SentInvites", fields: [senderId], references: [id])
+  type      InviteType   @default(PROJECT)
+  senderId  String
+  sender    User         @relation("SentInvites", fields: [senderId], references: [id])
 
   recipientId    String?
   recipient      User?   @relation("ReceivedInvites", fields: [recipientId], references: [id])
@@ -357,4 +357,9 @@ enum InviteStatus {
   ACCEPTED
   EXPIRED
   REJECTED
+}
+
+enum InviteType {
+  PROJECT
+  BOARD
 }

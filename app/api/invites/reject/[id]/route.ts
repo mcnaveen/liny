@@ -35,10 +35,9 @@ export async function POST(
       return new NextResponse("Invite is no longer valid", { status: 400 });
     }
 
-    // Update invite status to REJECTED
-    await db.invite.update({
+    // Delete the invite
+    await db.invite.delete({
       where: { id: params.id },
-      data: { status: InviteStatus.REJECTED },
     });
 
     return NextResponse.json({ message: "Invite rejected successfully" });

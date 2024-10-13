@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { InviteStatus } from "@prisma/client";
+import { InviteStatus, InviteType } from "@prisma/client";
 import { z } from "zod";
 
 import { db } from "@/lib/db";
@@ -8,18 +8,19 @@ import { checkUserAccess } from "@/helpers/common/hasAccess";
 
 const inviteSchema = z.object({
   email: z.string().email(),
-  projectId: z.string(),
+  projectId: z.string().optional(),
   boardId: z.string().optional(),
 });
 
 type InviteData = {
   projectId?: string;
+  boardId?: string;
   status: InviteStatus;
   expiresAt: Date;
   senderId: string;
   recipientId?: string;
   recipientEmail: string;
-  boardId?: string;
+  type: InviteType;
 };
 
 export async function POST(req: NextRequest) {
@@ -36,7 +37,8 @@ export async function POST(req: NextRequest) {
 
     const hasAccess = await checkUserAccess({
       userId: userId,
-      projectId,
+      projectId: projectId,
+      boardId: boardId,
     });
 
     if (!hasAccess) {
@@ -54,14 +56,21 @@ export async function POST(req: NextRequest) {
     }
 
     // Check if an invite already exists with the same email, projectId, or boardId
+    let whereCondition;
+
+    if (boardId) {
+      whereCondition = { recipientEmail: email, boardId };
+    } else if (projectId) {
+      whereCondition = { recipientEmail: email, projectId };
+    } else {
+      return NextResponse.json(
+        { error: "Either projectId or boardId must be provided" },
+        { status: 400 }
+      );
+    }
+
     const existingInvite = await db.invite.findFirst({
-      where: {
-        OR: [
-          { recipientEmail: email, projectId },
-          { recipientEmail: email, boardId },
-          { projectId, boardId },
-        ],
-      },
+      where: whereCondition,
     });
 
     if (existingInvite) {
@@ -77,6 +86,7 @@ export async function POST(req: NextRequest) {
       projectId,
       status: InviteStatus.PENDING,
       expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      type: projectId ? InviteType.PROJECT : InviteType.BOARD,
     };
 
     // If the recipient exists, set their ID in the invite data
@@ -84,9 +94,17 @@ export async function POST(req: NextRequest) {
       inviteData.recipientId = checkRecipient.id;
     }
 
-    // If boardId is provided, include it in the invite data
+    // If boardId is provided, include it in the invite data and fetch the associated projectId
     if (boardId) {
       inviteData.boardId = boardId;
+      const board = await db.board.findUnique({
+        where: { id: boardId },
+        select: { projectId: true },
+      });
+
+      if (board) {
+        inviteData.projectId = board.projectId;
+      }
     }
 
     // Create the invite in the database
@@ -96,6 +114,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ invite: createdInvite }, { status: 201 });
   } catch (error) {
+    console.error(error);
+
     return NextResponse.json(
       { error: "An error occurred while processing the request." },
       { status: 500 }

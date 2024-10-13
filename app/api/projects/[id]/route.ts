@@ -7,7 +7,7 @@ import { checkUserAccess } from "@/helpers/common/hasAccess";
 
 export async function GET(
   _request: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: { id: string } }
 ) {
   const { id } = params;
 
@@ -27,34 +27,29 @@ export async function GET(
         },
         {
           isPrivate: true,
-          AND: [
+          OR: [
             {
-              OR: [
-                {
-                  project: {
-                    projectUsers: {
-                      some: {
-                        userId: session?.user.id,
-                        role: {
-                          in: ["OWNER", "ADMIN", "MEMBER"],
-                        },
-                      },
+              project: {
+                projectUsers: {
+                  some: {
+                    userId: session?.user.id,
+                    role: {
+                      in: ["OWNER", "ADMIN", "MEMBER"],
                     },
                   },
                 },
-                {
-                  boardUsers: {
-                    some: {
-                      userId: session?.user.id,
-                      role: {
-                        in: ["OWNER", "ADMIN", "MEMBER"],
-                      },
-                    },
-                  },
-                },
-              ],
+              },
             },
-            { isPrivate: hasAccess },
+            {
+              boardUsers: {
+                some: {
+                  userId: session?.user.id,
+                  role: {
+                    in: ["OWNER", "ADMIN", "MEMBER"],
+                  },
+                },
+              },
+            },
           ],
         },
       ],

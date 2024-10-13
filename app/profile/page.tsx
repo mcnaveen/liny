@@ -1,13 +1,13 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import { UserPlus } from "lucide-react";
+import { Invite } from "@prisma/client";
 
 import { authOptions } from "@/lib/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { InviteCard } from "@/components/user/invite-card";
-import { db } from "@/lib/db";
-import { Invite } from "@prisma/client";
+import { InviteCard } from "@/components/user/invites/card";
+import { getUserInvites } from "@/helpers/user/getUserInvites";
 
 export default async function Profile() {
   const session = await getServerSession(authOptions);
@@ -16,20 +16,7 @@ export default async function Profile() {
     redirect("/login");
   }
 
-  // get invites data
-  const invites = await db.invite.findMany({
-    where: {
-      recipientId: session.user.id,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    include: {
-      project: true,
-      board: true,
-      sender: true,
-    },
-  });
+  const invites = await getUserInvites("PENDING");
 
   return (
     <div className="mx-auto h-auto max-w-7xl overflow-hidden px-4 py-4 sm:px-6 sm:py-6 lg:px-8">

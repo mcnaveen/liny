@@ -71,13 +71,54 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         { message: "Validation error", errors: fieldErrors },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     return NextResponse.json(
       { message: "Failed to create board" },
-      { status: 500 },
+      { status: 500 }
+    );
+  }
+}
+
+export async function GET(request: Request) {
+  const user = await authenticate(request);
+
+  if (!user) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const projectsWithAccess = await db.project.findMany({
+      where: {
+        OR: [
+          { projectUsers: { some: { userId: user.id } } },
+          { boards: { some: { boardUsers: { some: { userId: user.id } } } } },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        boards: {
+          where: {
+            boardUsers: { some: { userId: user.id } },
+          },
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+      },
+    });
+
+    return NextResponse.json(projectsWithAccess, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(
+      { message: "Failed to fetch projects and boards" },
+      { status: 500 }
     );
   }
 }

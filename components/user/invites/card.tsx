@@ -8,8 +8,8 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-import { Button } from "../ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type InviteCardProps = {
   invite: Invite & {
@@ -24,7 +24,7 @@ export const InviteCard: React.FC<InviteCardProps> = ({ invite }) => {
 
   const handleClick = async (action: "accept" | "reject") => {
     try {
-      const response = await fetch(`/api/invite/${action}/${invite.id}`, {
+      const response = await fetch(`/api/invites/${action}/${invite.id}`, {
         method: "POST",
       });
 
@@ -56,7 +56,6 @@ export const InviteCard: React.FC<InviteCardProps> = ({ invite }) => {
         }
       );
     } catch (error) {
-      console.error("Error handling invite:", error);
       toast.error(
         action === "reject"
           ? "Failed to reject invite"
@@ -74,24 +73,24 @@ export const InviteCard: React.FC<InviteCardProps> = ({ invite }) => {
             <AvatarFallback>{invite?.sender?.name?.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <h3 className="text-lg font-semibold flex items-center">
-              {invite?.sender?.name
-                ? `${invite?.sender?.name} invited you to`
-                : "You have been invited to"}
-              <span className="font-bold ml-2">
-                <Link
-                  href={
-                    invite.board
-                      ? `/${invite.project?.slug}/${invite.board.slug}?ref=invite`
-                      : `/${invite.project?.slug}?ref=invite`
-                  }
-                  target="_blank"
-                >
-                  {invite?.board?.name || invite?.project?.name}
-                </Link>
-              </span>
-            </h3>
+            <span className="text-sm font-semibold flex items-center">
+              <Link
+                href={
+                  invite.board
+                    ? `/${invite.project?.slug}/${invite.board.slug}?ref=invite`
+                    : `/${invite.project?.slug}?ref=invite`
+                }
+                target="_blank"
+              >
+                {invite?.board?.name || invite?.project?.name}
+              </Link>
+            </span>
             <div className="items-center inline-flex">
+              <span className="text-xs text-gray-500">
+                {invite?.sender?.name ? "from" : "by"} {invite?.sender?.name}
+              </span>
+              <span className="mx-1 text-gray-400">•</span>
+
               <span className="flex items-center text-xs text-gray-500">
                 Expires{" "}
                 <span className="ml-1 font-medium">
