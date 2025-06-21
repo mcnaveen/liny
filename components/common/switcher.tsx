@@ -38,7 +38,7 @@ export const ProjectSwitcher = () => {
   const [open, setOpen] = React.useState(false);
   const [showNewProjectDialog, setShowNewProjectDialog] = React.useState(false);
   const [selectedProject, setSelectedProject] = React.useState<Project | null>(
-    null,
+    null
   );
   const router = useRouter();
   const pathname = usePathname();
@@ -70,6 +70,8 @@ export const ProjectSwitcher = () => {
     setOpen(false);
     router.push(`/${project.slug}`);
   };
+
+  if (!selectedProject) return null;
 
   return (
     <Dialog open={showNewProjectDialog} onOpenChange={setShowNewProjectDialog}>
@@ -131,7 +133,7 @@ export const ProjectSwitcher = () => {
                         "ml-auto h-4 w-4",
                         selectedProject?.id === project.id
                           ? "opacity-100"
-                          : "opacity-0",
+                          : "opacity-0"
                       )}
                     />
                   </CommandItem>

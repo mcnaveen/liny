@@ -14,9 +14,10 @@ export async function generateMetadata({
 }: {
   params: { board: string; slug: string };
 }) {
-  const board = (await findBoardBySlug(params.board)) as
-    | (Board & { project: Project; projectId: string; id: string })
-    | null;
+  const board = (await findBoardBySlug({
+    slug: params.board,
+    projectSlug: params.slug,
+  })) as (Board & { project: Project; projectId: string; id: string }) | null;
 
   return {
     title: board?.name + " - " + board?.project?.name,
@@ -30,9 +31,10 @@ export default async function BoardPage({
   params: { board: string; slug: string };
   searchParams: { view?: string };
 }) {
-  const board = (await findBoardBySlug(params.board)) as
-    | (Board & { project: Project; projectId: string; id: string })
-    | null;
+  const board = (await findBoardBySlug({
+    slug: params.board,
+    projectSlug: params.slug,
+  })) as (Board & { project: Project; projectId: string; id: string }) | null;
   const session = await getServerSession(authOptions);
   const view = searchParams.view || "list";
 
@@ -48,7 +50,7 @@ export default async function BoardPage({
 
   return (
     <PostsList
-      boardId={board.id}
+      boardId={board?.id as string}
       cols={2}
       currentUserId={session?.user?.id as string}
       hasAccess={hasAccess}

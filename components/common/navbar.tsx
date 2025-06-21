@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -17,9 +18,15 @@ import { ProjectSwitcher } from "@/components/common/switcher";
 import { ThemeSwitch } from "@/components/common/theme";
 import { SignOutButton } from "@/components/common/signout-button";
 import { SignInButton } from "@/components/common/signin-button";
+import { SYSTEM_PATHS } from "@/lib/constants";
 
 export const Navbar = () => {
   const { data: session } = useSession();
+  const pathname = usePathname();
+
+  const isSystemPath = SYSTEM_PATHS.some((path) =>
+    pathname.startsWith(`/${path}`)
+  );
 
   return (
     <nav className="sticky top-0 z-10 border-b border-gray-200 bg-white px-4 dark:border-gray-800 dark:bg-[#0A0A0A] sm:px-6 lg:px-8">
@@ -36,7 +43,9 @@ export const Navbar = () => {
                   width={32}
                 />
               </Link>
-              {session?.user.isInstanceAdmin && <ProjectSwitcher />}
+              {session?.user.isInstanceAdmin && !isSystemPath && (
+                <ProjectSwitcher />
+              )}
             </div>
             <div className="ml-10 hidden sm:block">
               {/* Can be used for mobile */}
@@ -61,7 +70,9 @@ export const Navbar = () => {
                   >
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                    <Link href="/profile">
+                      <DropdownMenuItem>Profile</DropdownMenuItem>
+                    </Link>
                     <DropdownMenuItem>Billing</DropdownMenuItem>
                     <DropdownMenuItem>
                       <ThemeSwitch showText />

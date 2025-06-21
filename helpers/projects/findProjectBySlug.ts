@@ -3,7 +3,7 @@ import { Project } from "@prisma/client";
 import { db } from "@/lib/db";
 
 export const findProjectBySlug = async (
-  slug: string,
+  slug: string
 ): Promise<Project | null> => {
   try {
     const project = await db.project.findUnique({
@@ -19,6 +19,7 @@ export const findProjectBySlug = async (
         createdAt: true,
         updatedAt: true,
         userId: true,
+        projectUsers: true,
       },
     });
 

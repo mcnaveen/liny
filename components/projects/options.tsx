@@ -3,14 +3,27 @@
 import { useState } from "react";
 import { Check, EllipsisVertical, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
+import { useInvite } from "@/hooks/useInvite";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import Spinner from "@/components/common/spinner";
+import { Project } from "@prisma/client";
 
-import { Button } from "../ui/button";
+const inviteSchema = z.object({
+  email: z.string().email(),
+});
+
+type InviteFormData = z.infer<typeof inviteSchema>;
 
 const buttonVariants = {
   initial: { opacity: 0, y: 20 },
@@ -24,9 +37,10 @@ const transition = {
   damping: 30,
 };
 
-export const ProjectOptions = () => {
+export const ProjectOptions = ({ data }: { data: Project }) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [deleteState, setDeleteState] = useState("initial");
+  const [showInvite, setShowInvite] = useState(false);
 
   const handleConfirmClick = () => {
     setDeleteState("deleting");
@@ -39,115 +53,133 @@ export const ProjectOptions = () => {
     }, 2000);
   };
 
+  const { register, handleSubmit, reset } = useForm<InviteFormData>({
+    resolver: zodResolver(inviteSchema),
+  });
+
+  const inviteMutation = useInvite({ projectId: data.id });
+
+  const onSubmit = async (data: InviteFormData) => {
+    inviteMutation.mutate(data, {
+      onSuccess: () => {
+        reset();
+        setShowInvite(false);
+      },
+    });
+  };
+
   return (
-    <Popover>
-      <PopoverTrigger>
-        <Button size="icon" variant="secondary">
-          <EllipsisVertical className="h-4 w-4" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent
-        align="end"
-        className="overflow-hidden p-0"
-        sideOffset={10}
-      >
-        <motion.div
-          animate={{ opacity: 1, scale: 1 }}
-          className="flex flex-col gap-2 p-2"
-          initial={{ opacity: 0, scale: 0.95 }}
-          transition={transition}
+    <>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button size="icon" variant="secondary">
+            <EllipsisVertical className="h-4 w-4" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="end"
+          className="overflow-hidden p-0"
+          sideOffset={10}
         >
-          <Button className="w-full" variant="secondary">
-            Edit Project
-          </Button>
-          <Button className="w-full" variant="secondary">
-            Invite Team
-          </Button>
-          <AnimatePresence mode="wait">
-            {!showDeleteConfirm ? (
-              <motion.div
-                key="delete"
-                animate="animate"
-                exit="exit"
-                initial="initial"
-                transition={transition}
-                variants={buttonVariants}
-              >
-                <Button
-                  className="w-full"
-                  variant="destructive"
-                  onClick={() => setShowDeleteConfirm(true)}
+          <motion.div
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex flex-col gap-2 p-2"
+            initial={{ opacity: 0, scale: 0.95 }}
+            transition={transition}
+          >
+            <Button className="w-full" variant="secondary">
+              Edit Project
+            </Button>
+            <Button
+              className="w-full"
+              variant="secondary"
+              onClick={() => setShowInvite(true)}
+            >
+              Invite Team
+            </Button>
+            <AnimatePresence mode="wait">
+              {!showDeleteConfirm ? (
+                <motion.div
+                  key="delete"
+                  animate="animate"
+                  exit="exit"
+                  initial="initial"
+                  transition={transition}
+                  variants={buttonVariants}
                 >
-                  Delete Project
-                </Button>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="confirm"
-                animate="animate"
-                className="flex w-full gap-2"
-                exit="exit"
-                initial="initial"
-                transition={transition}
-                variants={buttonVariants}
-              >
-                <AnimatePresence mode="wait">
-                  {deleteState === "initial" && (
-                    <motion.div
-                      key="confirmButtons"
-                      className="flex w-full gap-2"
-                      exit={{ opacity: 0 }}
-                      initial={{ opacity: 1 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <Button
-                        className="w-full"
-                        variant="destructive"
-                        onClick={handleConfirmClick}
+                  <Button
+                    className="w-full"
+                    variant="destructive"
+                    onClick={() => setShowDeleteConfirm(true)}
+                  >
+                    Delete Project
+                  </Button>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="confirm"
+                  animate="animate"
+                  className="flex w-full gap-2"
+                  exit="exit"
+                  initial="initial"
+                  transition={transition}
+                  variants={buttonVariants}
+                >
+                  <AnimatePresence mode="wait">
+                    {deleteState === "initial" && (
+                      <motion.div
+                        key="confirmButtons"
+                        className="flex w-full gap-2"
+                        exit={{ opacity: 0 }}
+                        initial={{ opacity: 1 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        <Check className="mr-2" /> Confirm
-                      </Button>
-                      <Button
-                        className="w-full"
-                        variant="secondary"
-                        onClick={() => setShowDeleteConfirm(false)}
-                      >
-                        <X className="mr-2" /> Cancel
-                      </Button>
-                    </motion.div>
-                  )}
-                  {deleteState === "deleting" && (
-                    <motion.div
-                      key="deletingButton"
-                      animate={{ opacity: 1, width: "100%" }}
-                      className="w-full"
-                      initial={{ opacity: 0, width: "50%" }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Button disabled className="w-full" variant="destructive">
-                        Deleting...
-                      </Button>
-                    </motion.div>
-                  )}
-                  {deleteState === "success" && (
-                    <motion.div
-                      key="successButton"
-                      animate={{ opacity: 1, width: "100%" }}
-                      className="w-full"
-                      initial={{ opacity: 0, width: "50%" }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <Button disabled className="w-full" variant="secondary">
-                        <Check className="mr-2" /> Deleted Successfully
-                      </Button>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </PopoverContent>
-    </Popover>
+                        <Button
+                          className="w-full"
+                          variant="destructive"
+                          onClick={handleConfirmClick}
+                        >
+                          <Check className="mr-2" /> Confirm
+                        </Button>
+                        <Button
+                          className="w-full"
+                          variant="secondary"
+                          onClick={() => setShowDeleteConfirm(false)}
+                        >
+                          <X className="mr-2" /> Cancel
+                        </Button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        </PopoverContent>
+      </Popover>
+      <Dialog open={showInvite} onOpenChange={setShowInvite}>
+        <DialogContent>
+          <DialogHeader className="text-xl font-bold">Invite Team</DialogHeader>
+          <form
+            className="flex flex-col gap-2"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <Input
+              placeholder="Email"
+              type="email"
+              {...register("email")}
+              className="input"
+            />
+            <Button className="w-full mt-2" type="submit">
+              {inviteMutation.isPending ? (
+                <Spinner className="animate-spin" />
+              ) : (
+                "Send Invite"
+              )}
+            </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };

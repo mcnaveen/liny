@@ -39,7 +39,7 @@ export const BoardFilter = () => {
 
   return (
     <Popover>
-      <PopoverTrigger className="relative">
+      <PopoverTrigger asChild>
         <Button disabled={!session} size="icon" variant="outline">
           <Filter className="h-4 w-4" />
           {activeFiltersCount > 0 && (

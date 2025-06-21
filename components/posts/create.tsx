@@ -85,7 +85,7 @@ export const CreatePostSheet = ({
     },
     onError: (error) => {
       toast.error(
-        error instanceof Error ? error.message : "Failed to create post",
+        error instanceof Error ? error.message : "Failed to create post"
       );
     },
   });
@@ -161,7 +161,7 @@ export const CreatePost = ({
   boardId,
   projectId,
   text,
-  icon = false,
+  icon = true,
 }: {
   boardId: string;
   projectId: string;
@@ -173,7 +173,7 @@ export const CreatePost = ({
   return (
     <>
       <Button size="default" variant="default" onClick={() => setOpen(true)}>
-        {icon && <PlusIcon className="mr-2" />} {text || "Create Post"}
+        {icon && <PlusIcon className="mr-2 h-5 w-5" />} {text || "Create"}
       </Button>
       <CreatePostSheet
         boardId={boardId}

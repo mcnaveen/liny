@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth";
-import { Project } from "@prisma/client";
+import { Project, ProjectUser } from "@prisma/client";
+import { Users } from "lucide-react";
 
 import { findProjectBySlug } from "@/helpers/projects/findProjectBySlug";
 import { BoardsList } from "@/components/boards/list";
@@ -12,6 +13,7 @@ import { Recent } from "@/components/common/recent";
 import { Input } from "@/components/ui/input";
 import { Roadmap } from "@/components/common/roadmap";
 import { BoardFilter } from "@/components/boards/filter";
+import { Badge } from "@/components/ui/badge";
 
 import NotFound from "./not-found";
 import PrivateBoard from "./private";
@@ -33,7 +35,9 @@ export default async function ProjectPage({
 }: {
   params: { slug: string };
 }) {
-  const project = (await findProjectBySlug(params.slug)) as Project | null;
+  const project = (await findProjectBySlug(params.slug)) as
+    | (Project & { projectUsers: ProjectUser[] })
+    | null;
   const session = await getServerSession(authOptions);
 
   if (!project) {
@@ -55,14 +59,33 @@ export default async function ProjectPage({
         <header className="mb-8 flex flex-col items-center justify-between gap-4 sm:flex-row">
           {session && hasAccess && (
             <>
-              <Input
-                disabled
-                className="w-full sm:w-auto"
-                placeholder="Search boards... (Coming Soon)"
-              />
+              <section className="flex items-center gap-2">
+                <h1 className="text-xl font-bold sm:text-2xl">
+                  {project.name}
+                </h1>
+                {project.projectUsers.some(
+                  (user) =>
+                    user.userId === session.user.id && user.role === "MEMBER"
+                ) && (
+                  <Badge variant="outline">
+                    <Users
+                      aria-label="Shared Project"
+                      className="mr-1"
+                      size={13}
+                    />
+                    Team
+                  </Badge>
+                )}
+              </section>
               <section className="flex w-full flex-wrap items-center justify-center gap-2 sm:w-auto sm:justify-end">
+                <Input
+                  disabled
+                  className="w-full sm:w-auto"
+                  placeholder="Search boards... (Coming Soon)"
+                />
                 <BoardFilter />
-                <ProjectOptions />
+                {hasAccess && <BoardView />}
+                <ProjectOptions data={project} />
                 {session.user.isInstanceAdmin && (
                   <CreateBoard projectId={project.id} />
                 )}
@@ -83,7 +106,6 @@ export default async function ProjectPage({
                 <div>
                   <span className="text-md mb-2 block sm:mb-0">Boards</span>
                 </div>
-                {hasAccess && <BoardView />}
               </div>
               <div className="mt-4">
                 <BoardsList

@@ -6,46 +6,34 @@ export async function checkUserAccess({
   boardId,
 }: {
   userId: string | undefined;
-  projectId: string;
+  projectId?: string;
   boardId?: string;
 }) {
   if (!userId) return false;
 
   if (boardId) {
-    const board = await db.board.findFirst({
+    const boardUsers = await db.boardUser.findMany({
+      where: { userId, boardId, role: { in: ["OWNER", "ADMIN", "MEMBER"] } },
+    });
+
+    return boardUsers.length > 0;
+  } else if (projectId) {
+    const projectUsers = await db.projectUser.findMany({
+      where: { userId, projectId, role: { in: ["OWNER", "ADMIN", "MEMBER"] } },
+    });
+
+    if (projectUsers.length > 0) return true;
+
+    const boardUsers = await db.boardUser.findMany({
       where: {
-        id: boardId,
-        project: {
-          id: projectId,
-        },
-        OR: [
-          {
-            project: {
-              projectUsers: {
-                some: { userId, role: { in: ["OWNER", "ADMIN", "MEMBER"] } },
-              },
-            },
-          },
-          {
-            boardUsers: {
-              some: { userId, role: { in: ["OWNER", "ADMIN", "MEMBER"] } },
-            },
-          },
-        ],
+        userId,
+        role: { in: ["OWNER", "ADMIN", "MEMBER"] },
+        board: { projectId },
       },
     });
 
-    return !!board;
+    return boardUsers.length > 0;
   } else {
-    const project = await db.project.findFirst({
-      where: {
-        id: projectId,
-        projectUsers: {
-          some: { userId, role: { in: ["OWNER", "ADMIN", "MEMBER"] } },
-        },
-      },
-    });
-
-    return !!project;
+    return false;
   }
 }

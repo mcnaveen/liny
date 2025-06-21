@@ -1,10 +1,11 @@
 import { getServerSession } from "next-auth";
+import { Users } from "lucide-react";
+import { BoardUser } from "@prisma/client";
 
 import { authOptions } from "@/lib/auth";
 import { findBoardBySlug } from "@/helpers/boards/findBoardBySlug";
 import { checkUserAccess } from "@/helpers/common/hasAccess";
 import { BoardsList } from "@/components/boards/list";
-import { formatBoardType } from "@/helpers/common/formatBoardType";
 import { Badge } from "@/components/ui/badge";
 import { BoardView } from "@/components/boards/view";
 import { CreatePost } from "@/components/posts/create";
@@ -23,9 +24,10 @@ export default async function BoardLayout({
   children: React.ReactNode;
   params: { board: string; slug: string };
 }) {
-  const board = (await findBoardBySlug(params.board)) as
-    | (Board & { projectId: string })
-    | null;
+  const board = (await findBoardBySlug({
+    slug: params.board,
+    projectSlug: params.slug,
+  })) as (Board & { projectId: string; boardUsers: BoardUser[] }) | null;
   const session = await getServerSession(authOptions);
 
   if (!board) {
@@ -48,23 +50,30 @@ export default async function BoardLayout({
         <div className="mb-4 flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <div className="flex items-center space-x-4">
             <h1 className="text-xl font-bold sm:text-2xl">{board.name}</h1>
-            <Badge variant="outline">
-              {formatBoardType(board.boardType as string)}
-            </Badge>
+            {session &&
+              board.boardUsers.some(
+                (user) =>
+                  user.userId === session.user.id && user.role === "MEMBER"
+              ) && (
+                <Badge variant="outline">
+                  <Users aria-label="Shared Board" className="mr-1" size={13} />
+                  Team
+                </Badge>
+              )}
           </div>
-          <div className="flex flex-col items-start space-y-2 sm:flex-row sm:items-center sm:space-x-4 sm:space-y-0">
+          <div className="flex flex-col items-start space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
             <Input
               disabled
               className="w-full sm:w-auto"
               placeholder="Search Posts (Coming Soon)"
             />
             <BoardView />
-            {hasAccess && <BoardOptions />}
+            {hasAccess && <BoardOptions boardId={board.id} />}
             {session ? (
               <CreatePost
                 boardId={board.id as string}
                 projectId={board.projectId as string}
-                text="New Post"
+                text="New"
               />
             ) : null}
           </div>
